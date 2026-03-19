@@ -5,7 +5,9 @@ app = FastAPI()
 
 @app.get("/")
 def root():
-    return {"message": "Data Engineering API is running"}
+    return {
+        "message": "Data Engineering API is running"
+    }
 
 
 
@@ -13,3 +15,9 @@ def root():
 def ingest_data():
     return {"status": "Data received successfully"}
 
+@app.post("/ingest-customer")
+def ingest_customer_data():
+    return{
+        "status" : "Sucess",
+        "message" : "Customer data ingested"
+    }

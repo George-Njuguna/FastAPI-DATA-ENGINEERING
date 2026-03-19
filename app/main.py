@@ -12,6 +12,7 @@ def root():
 
 @app.post("/ingest-customer")
 def ingest_customer_data():
+    print("New data ingestion request received")
     return {
         "status": "Sucess",
         "message": "Customer data ingested"
@@ -22,3 +23,4 @@ def health_status():
     return{
         "status": "Ok"
     }
+    

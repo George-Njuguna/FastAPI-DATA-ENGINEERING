@@ -10,11 +10,6 @@ def root():
     }
 
 
-
-@app.post("/ingest")
-def ingest_data():
-    return {"status": "Data received successfully"}
-
 @app.post("/ingest-customer")
 def ingest_customer_data():
     return {

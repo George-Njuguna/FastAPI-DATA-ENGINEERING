@@ -1,6 +1,9 @@
 from fastapi import FastAPI
+import logging
 
 app = FastAPI()
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 @app.get("/")
@@ -12,15 +15,15 @@ def root():
 
 @app.post("/ingest-customer")
 def ingest_customer_data():
-    print("New data ingestion request received")
+    logger.info("New data ingestion request received")
     return {
-        "status": "Sucess",
+        "status": "Success",
         "message": "Customer data ingested"
     }
 
 @app.get("/health")
 def health_status():
     return{
-        "status": "Ok"
+        "status": "OK"
     }
     

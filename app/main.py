@@ -12,7 +12,7 @@ def root():
         "message": "Data Engineering API is running"
     }
 
-
+ # ingest endpoint
 @app.post("/ingest-customer")
 def ingest_customer_data():
     logger.info("New data ingestion request received")

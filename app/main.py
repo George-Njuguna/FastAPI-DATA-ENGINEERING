@@ -21,6 +21,7 @@ def ingest_customer_data():
         "message": "Customer data ingested"
     }
 
+ # Health endpoint
 @app.get("/health")
 def health_status():
     return{

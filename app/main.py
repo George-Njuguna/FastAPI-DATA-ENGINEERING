@@ -36,4 +36,12 @@ def customer_id_query(customer_id : int): # This requires the customer to have a
         "Message" : "Customer Fetched Successfully"
     }
 
+ # Query Parameters.
+@app.get("/customer")
+def customers(country : str , limit : int): # getting a certain number of customers based on country
+    return{
+        "country" : country,
+        "limit" : limit, 
+        "data" : []
+    }
     

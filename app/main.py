@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 @app.get("/")
 def root():
     return {
-        "message": "Data Engineering API is running"
+        "message": "Data Engineering API is running" 
     }
 
  # ingest endpoint
@@ -27,4 +27,13 @@ def health_status():
     return{
         "status": "OK"
     }
+
+ # Getting specific data 
+@app.get("/customer/{customer_id}")
+def customer_id_query(customer_id : int): # This requires the customer to have a specific datatype if you place 'abc' it is rejected automatically
+    return{
+        "customer_id" : customer_id,
+        "Message" : "Customer Fetched Successfully"
+    }
+
     

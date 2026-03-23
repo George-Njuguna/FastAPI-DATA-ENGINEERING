@@ -57,4 +57,8 @@ class Items(BaseModel):
 # we will then use the model as a parameter 
 @app.post("/items/")
 def insert_items(items : Items):
-    return items
+    return {
+        "status" : "Success",
+        "data" : items
+    }
+

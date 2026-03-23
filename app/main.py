@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 import logging
+from pydantic import BaseModel
+from typing import Optional
 
 app = FastAPI()
 logging.basicConfig(level=logging.INFO)
@@ -45,3 +47,14 @@ def customers(country : str , limit : int): # getting a certain number of custom
         "data" : []
     }
     
+ # Request body (data given by the user to your Application)
+# First we create a class that inherits base model that will define the shape of our data 
+class Items(BaseModel):
+    name : str
+    description : Optional[str] = None 
+    price : int
+
+# we will then use the model as a parameter 
+@app.post("/items/")
+def insert_items(items : Items):
+    return items

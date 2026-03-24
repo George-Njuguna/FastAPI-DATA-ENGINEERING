@@ -49,16 +49,18 @@ def customers(country : str , limit : int): # getting a certain number of custom
     
  # Request body (data given by the user to your Application)
 # First we create a class that inherits base model that will define the shape of our data 
-class Items(BaseModel):
+class Product(BaseModel):
     name : str
-    description : Optional[str] = None 
     price : int
+    in_stock : bool
 
 # we will then use the model as a parameter 
-@app.post("/items/")
-def insert_items(items : Items):
+@app.post("/ingest-product")
+def insert_items(Product : Product):
     return {
-        "status" : "Success",
-        "data" : items
+        "status" : "success",
+        "product" : Product
     }
+
+
 

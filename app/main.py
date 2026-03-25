@@ -57,10 +57,24 @@ class Product(BaseModel):
 # we will then use the model as a parameter 
 @app.post("/ingest-product")
 def insert_items(Product : Product):
+    
     return {
         "status" : "success",
         "product" : Product
     }
 
+@app.get("/product/{product_id}")
+def get_product(product_id : int):
+    return{
+        "Message" : "Sucess",
+        "Product" : []
+    }
 
+@app.get("products")
+def get_products(min_price : int = 1000 , max_price = 5000):
+    return{
+        "Message" : "Sucess",
+        "Data" : []
+    }
+    
 

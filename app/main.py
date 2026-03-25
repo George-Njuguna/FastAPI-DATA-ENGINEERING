@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 import logging
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, Field
+from typing import Optional 
 
 app = FastAPI()
 logging.basicConfig(level=logging.INFO)
@@ -51,7 +51,7 @@ def customers(country : str , limit : int): # getting a certain number of custom
 # First we create a class that inherits base model that will define the shape of our data 
 class Product(BaseModel):
     name : str
-    price : int
+    price : int = Field(le = 5000 , gt = 0) # setting the price to be greater than 0 but less than 5000
     in_stock : bool
 
 # we will then use the model as a parameter 

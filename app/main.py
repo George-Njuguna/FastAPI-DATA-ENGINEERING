@@ -52,6 +52,7 @@ def customers(country : str , limit : int): # getting a certain number of custom
 class Product(BaseModel):
     name : str
     price : int = Field(le = 5000 , gt = 0) # setting the price to be greater than 0 but less than 5000
+    description : str | None = None  # setting the description as optional 
     in_stock : bool
 
 # we will then use the model as a parameter 

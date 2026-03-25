@@ -56,25 +56,29 @@ class Product(BaseModel):
 
 # we will then use the model as a parameter 
 @app.post("/ingest-product")
-def insert_items(Product : Product):
+def insert_items(product : Product): 
     
     return {
         "status" : "success",
-        "product" : Product
+        "product" : product.model_dump() # you can return the pydantic model directly but it is usually advised to return a dictonary
     }
 
 @app.get("/product/{product_id}")
-def get_product(product_id : int):
+def get_product(product_id : int):# if a parameter exists it must be used in the output or logic
     return{
-        "Message" : "Sucess",
-        "Product" : []
+        "message" : "success",
+        "product_id" : product_id
     }
 
 @app.get("products")
-def get_products(min_price : int = 1000 , max_price = 5000):
+def get_products(min_price : int = 1000 , max_price : int  = 5000): # if a parameter exists it must be used in the output or logic
     return{
-        "Message" : "Sucess",
-        "Data" : []
+        "message" : "success",
+        "filters" : {
+            "min_price" : min_price,
+            "max_price" : max_price
+        },
+        "data" : []
     }
     
 

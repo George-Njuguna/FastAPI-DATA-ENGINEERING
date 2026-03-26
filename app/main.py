@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 import logging
 from pydantic import BaseModel, Field
+from datetime import datetime, timezone
+from uuid import uuid4
 from typing import Optional 
 
 app = FastAPI()
@@ -50,6 +52,7 @@ def customers(country : str , limit : int): # getting a certain number of custom
  # Request body (data given by the user to your Application)
 # First we create a class that inherits base model that will define the shape of our data 
 class Product(BaseModel):
+    id : str = Field(default_factory=lambda: str(uuid4())) # setting a dynamic default value that creates a new id everytime a new product is ingested
     name : str
     price : int = Field(le = 5000 , gt = 0) # setting the price to be greater than 0 but less than 5000
     description : str | None = None  # setting the description as optional 

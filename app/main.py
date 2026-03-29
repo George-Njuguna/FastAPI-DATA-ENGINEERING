@@ -68,7 +68,7 @@ def insert_items(product : Product):
         "product" : product.model_dump() # you can return the pydantic model directly but it is usually advised to return a dictonary
     }
 
-@app.get("/product/{product_id}")
+@app.get("/product/{product-id}")
 def get_product(product_id : int):# if a parameter exists it must be used in the output or logic
     return{
         "message" : "success",

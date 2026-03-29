@@ -41,7 +41,7 @@ def customer_id_query(customer_id : int): # This requires the customer to have a
     }
 
  # Query Parameters.
-@app.get("/customer")
+@app.get("/customers")
 def customers(country : str , limit : int): # getting a certain number of customers based on country
     return{
         "country" : country,
@@ -52,8 +52,8 @@ def customers(country : str , limit : int): # getting a certain number of custom
  # Request body (data given by the user to your Application)
 # First we create a class that inherits base model that will define the shape of our data 
 class Product(BaseModel):
-    id : str = Field(default_factory=lambda: str(uuid4())) # setting a dynamic default value that creates a new id everytime a new product is ingested
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc)) # runs datetime.now() anytime there is a new instance 
+    id : str = Field(default_factory = lambda: str(uuid4())) # setting a dynamic default value that creates a new id everytime a new product is ingested
+    created_at: datetime = Field(default_factory = lambda: datetime.now(timezone.utc)) # runs datetime.now() anytime there is a new instance 
     name : str
     price : int = Field(le = 5000 , gt = 0) # setting the price to be greater than 0 but less than 5000
     description : str | None = None  # setting the description as optional 

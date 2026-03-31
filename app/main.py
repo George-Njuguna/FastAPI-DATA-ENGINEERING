@@ -49,7 +49,7 @@ def customers(country : str , limit : int): # getting a certain number of custom
         "data" : []
     }
     
- # Request body (data given by the user to your Application)
+# Request body (data given by the user to your Application)
 # First we create a class that inherits base model that will define the shape of our data 
 class Product(BaseModel):
     id : str = Field(default_factory = lambda: str(uuid4())) # setting a dynamic default value that creates a new id everytime a new product is ingested

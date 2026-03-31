@@ -49,8 +49,8 @@ def customers(country : str , limit : int): # getting a certain number of custom
         "data" : []
     }
     
-# Request body (data given by the user to your Application)
-# First we create a class that inherits base model that will define the shape of our data 
+ # Request body (data given by the user to your Application)
+ # First we create a class that inherits base model that will define the shape of our data 
 class Product(BaseModel):
     id : str = Field(default_factory = lambda: str(uuid4())) # setting a dynamic default value that creates a new id everytime a new product is ingested
     created_at: datetime = Field(default_factory = lambda: datetime.now(timezone.utc)) # runs datetime.now() anytime there is a new instance 
@@ -59,7 +59,7 @@ class Product(BaseModel):
     description : str | None = None  # setting the description as optional 
     in_stock : bool = True # Setting a constant default value
 
-# we will then use the model as a parameter 
+ # we will then use the model as a parameter 
 @app.post("/ingest-product")
 def insert_items(product : Product): 
     

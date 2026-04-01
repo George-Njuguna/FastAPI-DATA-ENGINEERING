@@ -59,6 +59,15 @@ class Product(BaseModel):
     description : str | None = None  # setting the description as optional 
     in_stock : bool = True # Setting a constant default value
 
+ # we will then use the model as a parameter 
+@app.post("/ingest-product")
+def insert_items(product : Product): 
+    
+    return {
+        "status" : "success",
+        "product" : product.model_dump() # you can return the pydantic model directly but it is usually advised to return a dictonary
+    }
+
  # we will now create an order endpoint that has nested models
 class Customer(BaseModel):
     name : str = Field(min_length = 2)
@@ -72,16 +81,8 @@ class Order(BaseModel):
     order_id : str = Field(default_factory = lambda: str(uuid4()))
     customer : Customer
     item : List[Item] = Field(min_length = 1) # ensuring the list is not empty 
-    
 
- # we will then use the model as a parameter 
-@app.post("/ingest-product")
-def insert_items(product : Product): 
-    
-    return {
-        "status" : "success",
-        "product" : product.model_dump() # you can return the pydantic model directly but it is usually advised to return a dictonary
-    }
+
 
 @app.get("/product/{product-id}")
 def get_product(product_id : int):# if a parameter exists it must be used in the output or logic

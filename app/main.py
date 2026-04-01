@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 import logging
-from pydantic import BaseModel, Field , EmailStr
+from pydantic import BaseModel, Field , EmailStr, field_validator
 from datetime import datetime, timezone
 from uuid import uuid4
 from typing import List 
@@ -71,7 +71,14 @@ def insert_items(product : Product):
  # we will now create an order endpoint that has nested models
 class Customer(BaseModel):
     name : str = Field(min_length = 2)
+     # creating field validator for name 
     email : EmailStr
+     # creating field validator to get lowercase emails 
+    @field_validator(email)
+    @classmethod
+    def normalize_email(cls, v : str) -> str:
+        return v.strip().lower()
+
 
 class Item(BaseModel):
     sku : str = Field(pattern=r"^[A-Z]{3}-\d+$")

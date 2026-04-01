@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 import logging
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field , EmailStr
 from datetime import datetime, timezone
 from uuid import uuid4
-from typing import Optional 
+from typing import List 
 
 app = FastAPI()
 logging.basicConfig(level=logging.INFO)
@@ -58,6 +58,21 @@ class Product(BaseModel):
     price : int = Field(le = 5000 , gt = 0) # setting the price to be greater than 0 but less than 5000
     description : str | None = None  # setting the description as optional 
     in_stock : bool = True # Setting a constant default value
+
+ # we will now create an order endpoint that has nested models
+class Customer(BaseModel):
+    name : str = Field(min_length = 2)
+    email : EmailStr
+
+class Item(BaseModel):
+    sku : str = Field(pattern=r"^[A-Z]{3}-\d+$")
+    price : int = Field(gt = 0)
+
+class Order(BaseModel):
+    order_id : str = Field(default_factory = lambda: str(uuid4()))
+    customer : Customer
+    item : List[Item] = Field(min_length = 1) # ensuring the list is not empty 
+    
 
  # we will then use the model as a parameter 
 @app.post("/ingest-product")

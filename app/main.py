@@ -92,7 +92,8 @@ class Order(BaseModel):
 @app.post("/orders")
 def post_orders(order : Order):
     return {
-        "message" : "sucessfully Loaded Orders"
+        "message" : "sucessfully Loaded Orders",
+        "order" : order.model_dump()
     }
 
 

@@ -74,7 +74,7 @@ class Customer(BaseModel):
      # creating field validator for name 
     email : EmailStr
      # creating field validator to get lowercase emails 
-    @field_validator(email)
+    @field_validator("email")
     @classmethod
     def normalize_email(cls, v : str) -> str:
         return v.strip().lower()

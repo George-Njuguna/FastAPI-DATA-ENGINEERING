@@ -68,16 +68,15 @@ def insert_items(product : Product):
         "product" : product.model_dump() # you can return the pydantic model directly but it is usually advised to return a dictonary
     }
 
- 
+ # Creating a universal annotator
+def clean_string(v : str) -> str:
+    return v.strip().title()
+
+CleanName = Annotated[str, AfterValidator(clean_string)]
 
  # we will now create an order endpoint that has nested models
 class Customer(BaseModel):
-    name : str = Field(min_length = 2)
-     # creating field validator for name that strips whitespaces and places uppercase on begining letters 
-    @field_validator("name")
-    @classmethod
-    def normalize_name(cls, v : str) -> str:
-        return v.strip().title()
+    name : CleanName
     email : EmailStr
      # creating field validator to get lowercase emails 
     @field_validator("email")
@@ -88,7 +87,7 @@ class Customer(BaseModel):
 
 class Item(BaseModel):
     sku : str = Field(pattern=r"^[A-Z]{3}-\d+$")
-    product_name = str = Field(min_length = 1)
+    product_name : CleanName
     price : int = Field(gt = 0)
 
 

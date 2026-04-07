@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 import logging
-from pydantic import BaseModel, Field , EmailStr, field_validator
+from pydantic import BaseModel, Field , EmailStr, field_validator, AfterValidator
 from datetime import datetime, timezone
 from uuid import uuid4
-from typing import List 
+from typing import List, Annotated
 
 app = FastAPI()
 logging.basicConfig(level=logging.INFO)
@@ -68,6 +68,8 @@ def insert_items(product : Product):
         "product" : product.model_dump() # you can return the pydantic model directly but it is usually advised to return a dictonary
     }
 
+ 
+
  # we will now create an order endpoint that has nested models
 class Customer(BaseModel):
     name : str = Field(min_length = 2)
@@ -86,6 +88,7 @@ class Customer(BaseModel):
 
 class Item(BaseModel):
     sku : str = Field(pattern=r"^[A-Z]{3}-\d+$")
+    product_name = str = Field(min_length = 1)
     price : int = Field(gt = 0)
 
 

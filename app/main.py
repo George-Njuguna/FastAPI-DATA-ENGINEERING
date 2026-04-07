@@ -71,7 +71,11 @@ def insert_items(product : Product):
  # we will now create an order endpoint that has nested models
 class Customer(BaseModel):
     name : str = Field(min_length = 2)
-     # creating field validator for name 
+     # creating field validator for name that strips whitespaces and places uppercase on begining letters 
+    @field_validator("name")
+    @classmethod
+    def normalize_name(cls, v : str) -> str:
+        return v.strip().title()
     email : EmailStr
      # creating field validator to get lowercase emails 
     @field_validator("email")
@@ -83,6 +87,7 @@ class Customer(BaseModel):
 class Item(BaseModel):
     sku : str = Field(pattern=r"^[A-Z]{3}-\d+$")
     price : int = Field(gt = 0)
+
 
 class Order(BaseModel):
     order_id : str = Field(default_factory = lambda: str(uuid4()))

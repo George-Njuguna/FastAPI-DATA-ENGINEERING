@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 import logging
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, EmailStr, field_validator
 
 
 app = FastAPI()
@@ -14,14 +14,21 @@ def root():
         "message": "e-commerse  API is running" 
     }
 
+ # clean name normalization 
+
  # creating a customer model
 class Customer(BaseModel):
     name : str 
-    email : str 
+
+    email : EmailStr
+    @field_validator("email")
+    @classmethod
+    def email_normalization(cls, v) -> str:
+        return v.strip().lower()
 
 
  # creating a product model
 class Product(BaseModel):
     name : str 
-    price : int
+    price : int = Field( gt = 0 )
     description : str | None = None 

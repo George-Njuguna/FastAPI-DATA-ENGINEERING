@@ -86,7 +86,6 @@ class Customer(BaseModel):
 
 
 class Item(BaseModel):
-    sku : str = Field(pattern=r"^[A-Z]{3}-\d+$")
     product_name : CleanName
     price : int = Field(gt = 0)
 

@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 import logging
 from pydantic import BaseModel, Field, EmailStr, field_validator
+from typing import List, Annotated
+from pydantic.functional_validators import AfterValidator
 
 
 app = FastAPI()
@@ -15,10 +17,20 @@ def root():
     }
 
  # clean name normalization 
+def clean_string( v : str ) -> str:
+    v.strip().title()
+
+ # clean price normalization
+def clean_price( v, int ) -> int:
+    v.strip(',')
+
+CleanName = Annotated[str, AfterValidator(clean_string)]
+CleanPrice = Annotated[int, AfterValidator(clean_price)]
 
  # creating a customer model
 class Customer(BaseModel):
-    name : str 
+    first_name : CleanName
+    second_name : CleanName
 
     email : EmailStr
     @field_validator("email")
@@ -29,6 +41,6 @@ class Customer(BaseModel):
 
  # creating a product model
 class Product(BaseModel):
-    name : str 
-    price : int = Field( gt = 0 )
+    name : CleanName 
+    price : CleanPrice
     description : str | None = None 

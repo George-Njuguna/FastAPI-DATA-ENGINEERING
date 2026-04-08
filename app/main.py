@@ -95,10 +95,11 @@ class Order(BaseModel):
     customer : Customer
     item : List[Item] = Field(min_length = 1) # ensuring the list is not empty 
 
-@app.post("/orders")
+@app.post("/ingest-order")
 def post_orders(order : Order):
+    logger.info("New order received")
     return {
-        "message" : "sucessfully Loaded Orders",
+        "status" : "sucess",
         "order" : order.model_dump()
     }
 

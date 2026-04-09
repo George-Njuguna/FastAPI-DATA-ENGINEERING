@@ -49,7 +49,7 @@ class User_Account_Create(BaseModel): # This is internal
 
 
  # creating a product model
-class Product(BaseModel):
+class Product_Input(BaseModel):
     name : CleanName 
     price : CleanPrice
     description : str | None = None 

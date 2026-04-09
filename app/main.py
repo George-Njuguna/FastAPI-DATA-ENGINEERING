@@ -24,11 +24,18 @@ def clean_string( v : str ) -> str:
 def clean_price( v, int ) -> int:
     v.strip(',')
 
+
+CleanPassword = Annotated[
+    str,
+    Field(
+        pattern = "[\d{1}\w{1}]{8,12}"
+    )
+]
 CleanName = Annotated[str, AfterValidator(clean_string)]
 CleanPrice = Annotated[int, AfterValidator(clean_price)]
 
  # creating a customer model
-class Customer(BaseModel):
+class User_Account_Create(BaseModel): # This is internal 
     first_name : CleanName
     second_name : CleanName
 
@@ -37,6 +44,7 @@ class Customer(BaseModel):
     @classmethod
     def email_normalization(cls, v) -> str:
         return v.strip().lower()
+    
 
 
  # creating a product model
@@ -44,3 +52,5 @@ class Product(BaseModel):
     name : CleanName 
     price : CleanPrice
     description : str | None = None 
+
+

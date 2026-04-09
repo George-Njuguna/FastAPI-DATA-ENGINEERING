@@ -28,7 +28,7 @@ def clean_price( v, int ) -> int:
 CleanPassword = Annotated[
     str,
     Field(
-        pattern = "[\d{1}\w{1}]{8,12}"
+        pattern = r"(?=.*\d)(?=.*\w)(?=.*[^A-Za-z0-9]).{8,12}$"
     )
 ]
 CleanName = Annotated[str, AfterValidator(clean_string)]
@@ -38,6 +38,7 @@ CleanPrice = Annotated[int, AfterValidator(clean_price)]
 class User_Account_Create(BaseModel): # This is internal 
     first_name : CleanName
     second_name : CleanName
+    password : CleanPassword
 
     email : EmailStr
     @field_validator("email")

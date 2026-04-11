@@ -48,11 +48,10 @@ class UserCreate(BaseModel): # This is internal
     def email_normalization(cls, v) -> str:
         return v.strip().lower()
 
-class User(SQLModel, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
 
     
 class UserOut(BaseModel):
+    user_id :int
     first_name : CleanName
     second_name : CleanName
     email : EmailStr
@@ -63,4 +62,14 @@ class Product_Input(BaseModel):
     name : CleanName 
     price : CleanPrice
     description : str | None = None 
+
+@app.get("/user/{user_id}", response_model = UserOut)
+def GetUserInfo( user_id : int ):
+    return{
+        "user_id" : user_id,
+        "first_name" : "George",
+        "second_name" : "Njuguna",
+        "Password" : "Xotourlif3!",
+        "email" : "example@email.com"
+    }
 

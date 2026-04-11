@@ -36,14 +36,15 @@ class UserBase(BaseModel): # This is internal
     id: UUID = Field(default_factory=uuid4)
     first_name : CleanName
     second_name : CleanName
+
+
+class UserCreate(UserBase):
+    password : str
     email : EmailStr
     @field_validator("email")
     @classmethod
     def email_normalization(cls, v) -> str:
         return v.strip().lower()
-
-class UserCreate(UserBase):
-    password : str
     
 class UserOut(BaseModel):
     user_id : UUID

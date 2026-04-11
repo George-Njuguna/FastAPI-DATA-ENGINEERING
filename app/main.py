@@ -3,8 +3,8 @@ import logging
 from pydantic import BaseModel, Field, EmailStr, field_validator
 from typing import List, Annotated
 from pydantic.functional_validators import AfterValidator
-import uuid
-from sqlmodel import SQLModel, Field
+from uuid import uuid4, UUID
+
 
 
 app = FastAPI()
@@ -20,27 +20,23 @@ def root():
 
  # clean name normalization 
 def clean_string( v : str ) -> str:
-    v.strip().title()
+    return v.strip().title()
 
  # clean price normalization
 def clean_price( v, int ) -> int:
-    v.strip(',')
+    return v.strip(',')
 
 
-CleanPassword = Annotated[
-    str,
-    Field(
-        regex = r"(?=.*\d)(?=.*\w)(?=.*[^A-Za-z0-9]).{8,12}$"
-    )
-]
+
 CleanName = Annotated[str, AfterValidator(clean_string)]
 CleanPrice = Annotated[int, AfterValidator(clean_price)]
 
  # creating a customer model
-class UserCreate(BaseModel): # This is internal 
+class UserCreate(BaseModel): # This is internal
+    id: UUID = Field(default_factory=uuid4)
     first_name : CleanName
     second_name : CleanName
-    password : CleanPassword
+    password : str
 
     email : EmailStr
     @field_validator("email")
@@ -51,7 +47,7 @@ class UserCreate(BaseModel): # This is internal
 
     
 class UserOut(BaseModel):
-    user_id :int
+    user_id : UUID
     first_name : CleanName
     second_name : CleanName
     email : EmailStr
@@ -72,4 +68,17 @@ def GetUserInfo( user_id : int ):
         "Password" : "Xotourlif3!",
         "email" : "example@email.com"
     }
+
+@app.post("/create-user/", response_model = UserOut)
+def CreateNewUserAccount(user_info : UserCreate):
+    logger.info(f"New Account Created")
+    return {
+        "message" : "sucess",
+        "user_id" : user_info.id,
+        "first_name" : user_info.first_name,
+        "second_name" : user_info.second_name,
+        "Password" : user_info.password,
+        "email" : user_info.email
+    }
+
 

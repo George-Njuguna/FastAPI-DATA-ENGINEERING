@@ -48,7 +48,7 @@ class UserCreate(UserBase):
     
 class UserOut(UserBase):
     id: UUID = Field(default_factory=uuid4)
-    created_at : datetime
+    created_at: datetime = Field(default_factory=datetime.utcnow)
     
 
  # creating a product model
@@ -70,13 +70,10 @@ def GetUserInfo( user_id : int ):
 @app.post("/create-user/", response_model = UserOut)
 def CreateNewUserAccount(user_info : UserCreate):
     logger.info(f"New Account Created")
-    return {
-        "message" : "sucess",
-        "user_id" : user_info.id,
-        "first_name" : user_info.first_name,
-        "second_name" : user_info.second_name,
-        "Password" : user_info.password,
-        "email" : user_info.email
-    }
+    return UserOut(
+        first_name=user_info.first_name,
+        second_name=user_info.second_name,
+        email=user_info.email
+    )
 
 

@@ -4,6 +4,7 @@ from pydantic import BaseModel, Field, EmailStr, field_validator
 from typing import List, Annotated
 from pydantic.functional_validators import AfterValidator
 from uuid import uuid4, UUID
+from datetime import datetime
 
 
 
@@ -33,7 +34,6 @@ CleanPrice = Annotated[int, AfterValidator(clean_price)]
 
  # creating a customer model
 class UserBase(BaseModel): # This is internal
-    id: UUID = Field(default_factory=uuid4)
     first_name : CleanName
     second_name : CleanName
 
@@ -46,11 +46,9 @@ class UserCreate(UserBase):
     def email_normalization(cls, v) -> str:
         return v.strip().lower()
     
-class UserOut(BaseModel):
-    user_id : UUID
-    first_name : CleanName
-    second_name : CleanName
-    email : EmailStr
+class UserOut(UserBase):
+    id: UUID = Field(default_factory=uuid4)
+    created_at : datetime
     
 
  # creating a product model

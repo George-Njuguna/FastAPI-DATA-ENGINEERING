@@ -56,10 +56,16 @@ class UserOut(UserBase):
  # creating a product model
 class ProductBase(BaseModel):
     name : CleanName 
-
-class ProductCreate(ProductBase):
     price : int
     description : str | None = None
+
+class ProductUpdate(ProductBase):
+    pass
+
+
+class ProductOut(ProductBase):
+    id : UUID = Field(default_factory=uuid4)
+    created_at : datetime = Field(default_factory=datetime.utcnow)
 
 
 

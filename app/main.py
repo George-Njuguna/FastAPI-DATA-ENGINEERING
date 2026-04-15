@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 import logging
-from pydantic import BaseModel, Field, EmailStr, field_validator
+from pydantic import BaseModel, Field, EmailStr, field_validator , ConfigDict
 from typing import List, Annotated
 from pydantic.functional_validators import AfterValidator
 from uuid import uuid4, UUID
@@ -39,12 +39,14 @@ class UserBase(BaseModel): # This is internal
 
 
 class UserCreate(UserBase):
+    model_config = ConfigDict(extra='forbid') # This forbids any other data from being loaded 
     password : str
     email : EmailStr
     @field_validator("email")
     @classmethod
     def email_normalization(cls, v) -> str:
         return v.strip().lower()
+    
     
 class UserOut(UserBase):
     id: UUID = Field(default_factory=uuid4)

@@ -54,10 +54,14 @@ class UserOut(UserBase):
     
 
  # creating a product model
-class Product_Input(BaseModel):
+class ProductBase(BaseModel):
     name : CleanName 
-    price : CleanPrice
-    description : str | None = None 
+
+class ProductCreate(ProductBase):
+    price : int
+    description : str | None = None
+
+
 
 @app.get("/user/{user_id}", response_model = UserOut)
 def GetUserInfo( user_id : int ):

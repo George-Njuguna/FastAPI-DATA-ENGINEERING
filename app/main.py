@@ -48,7 +48,7 @@ class UserCreate(UserBase):
         return v.strip().lower()
     
     
-class UserOut(UserBase):
+class UserOut(UserCreate):
     id: UUID = Field(default_factory=uuid4)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     
@@ -67,13 +67,13 @@ class ProductOut(ProductBase):
     id : UUID = Field(default_factory=uuid4)
     created_at : datetime = Field(default_factory=datetime.utcnow)
 
-@app.get("/products/", response_model = ProductOut)
+@app.post("/products/", response_model = ProductOut)
 def PostProduct(product_info : ProductUpdate):
     logger.info(f"New product Added")
     return ProductOut(
-        name = ProductUpdate.name,
-        price = ProductUpdate.price,
-        description = ProductUpdate.description
+        name = product_info.name,
+        price = product_info.price,
+        description = product_info.description
     )
 
 

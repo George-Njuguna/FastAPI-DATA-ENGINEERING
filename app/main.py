@@ -6,7 +6,9 @@ from pydantic.functional_validators import AfterValidator
 from uuid import uuid4, UUID
 from datetime import datetime
 
-
+# Simulating Database
+Users_db = []
+Products_db = []
 
 app = FastAPI()
 logging.basicConfig(level=logging.INFO)
@@ -23,16 +25,13 @@ def root():
 def clean_string( v : str ) -> str:
     return v.strip().title()
 
- # clean price normalization
-def clean_price( v, int ) -> int:
-    return v.strip(',')
-
 
 
 CleanName = Annotated[str, AfterValidator(clean_string)]
-CleanPrice = Annotated[int, AfterValidator(clean_price)]
 
- # creating a customer model
+#-------------------------------
+# USER MODELS
+#-------------------------------
 class UserBase(BaseModel): # This is internal
     first_name : CleanName
     second_name : CleanName
@@ -52,11 +51,13 @@ class UserOut(UserCreate):
     id: UUID = Field(default_factory=uuid4)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     
+#-------------------------------
+# PRODUCT MODELS
+#-------------------------------
 
- # creating a product model
 class ProductBase(BaseModel):
     name : CleanName 
-    price : int
+    price : int = Field( gt = 0 )
     description : str | None = None
 
 class ProductUpdate(ProductBase):
@@ -67,15 +68,24 @@ class ProductOut(ProductBase):
     id : UUID = Field(default_factory=uuid4)
     created_at : datetime = Field(default_factory=datetime.utcnow)
 
+#------------------------
+# PRODUCT ENDPOINTS
+#------------------------
+
 @app.post("/products/", response_model = ProductOut)
 def PostProduct(product_info : ProductUpdate):
     logger.info(f"New product Added")
-    return ProductOut(
+    new_product =  ProductOut(
         name = product_info.name,
         price = product_info.price,
         description = product_info.description
     )
+    Products_db.append(new_product)
+    return new_product
 
+#---------------------------
+# USER ENDPOINTS
+#---------------------------
 
 @app.get("/user/{user_id}", response_model = UserOut)
 def GetUserInfo( user_id : int ):

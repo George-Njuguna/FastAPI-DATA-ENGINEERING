@@ -67,6 +67,14 @@ class ProductOut(ProductBase):
     id : UUID = Field(default_factory=uuid4)
     created_at : datetime = Field(default_factory=datetime.utcnow)
 
+@app.get("/products/", response_model = ProductOut)
+def PostProduct(product_info : ProductUpdate):
+    logger.info(f"New product Added")
+    return ProductOut(
+        name = ProductUpdate.name,
+        price = ProductUpdate.price,
+        description = ProductUpdate.description
+    )
 
 
 @app.get("/user/{user_id}", response_model = UserOut)

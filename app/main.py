@@ -47,9 +47,10 @@ class UserCreate(UserBase):
         return v.strip().lower()
     
     
-class UserOut(UserCreate):
+class UserOut(UserBase):
     id: UUID = Field(default_factory=uuid4)
     created_at: datetime = Field(default_factory=datetime.utcnow)
+    email : EmailStr
     
 #-------------------------------
 # PRODUCT MODELS
@@ -83,19 +84,13 @@ def PostProduct(product_info : ProductUpdate):
     Products_db.append(new_product)
     return new_product
 
+@app.get("/products/", response_model = ProductOut)
+def get_product():
+    return Products_db
+
 #---------------------------
 # USER ENDPOINTS
 #---------------------------
-
-@app.get("/user/{user_id}", response_model = UserOut)
-def GetUserInfo( user_id : int ):
-    return{
-        "user_id" : user_id,
-        "first_name" : "George",
-        "second_name" : "Njuguna",
-        "Password" : "Xotourlif3!",
-        "email" : "example@email.com"
-    }
 
 @app.post("/create-user/", response_model = UserOut)
 def CreateNewUserAccount(user_info : UserCreate):
@@ -106,4 +101,6 @@ def CreateNewUserAccount(user_info : UserCreate):
         email=user_info.email
     )
 
-
+@app.get("/user/", response_model = UserOut)
+def GetUserInfo():
+    return Users_db

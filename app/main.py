@@ -6,7 +6,7 @@ from pydantic.functional_validators import AfterValidator
 from uuid import uuid4, UUID
 from sqlalchemy.orm import Session
 from datetime import datetime
-from db import SessionLocal, engine
+from app.db import SessionLocal, engine
 
 # Simulating Database
 Users_db = []

@@ -1,10 +1,12 @@
-from fastapi import FastAPI
+from fastapi import FastAPI ,HTTPException, Depends
 import logging
 from pydantic import BaseModel, Field, EmailStr, field_validator , ConfigDict
 from typing import List, Annotated
 from pydantic.functional_validators import AfterValidator
 from uuid import uuid4, UUID
+from sqlalchemy.orm import Session
 from datetime import datetime
+from db import SessionLocal, engine
 
 # Simulating Database
 Users_db = []
@@ -28,6 +30,17 @@ def clean_string( v : str ) -> str:
 
 
 CleanName = Annotated[str, AfterValidator(clean_string)]
+
+#-------------------------------
+# DEPENDANCY INJECTION
+#-------------------------------
+def get_db():
+    db = SessionLocal()
+
+    try:
+        yield db 
+    finally:
+        db.close()
 
 #-------------------------------
 # USER MODELS
@@ -74,7 +87,7 @@ class ProductOut(ProductBase):
 #------------------------
 
 @app.post("/products/", response_model = ProductOut)
-def PostProduct(product_info : ProductUpdate):
+def PostProduct(product_info : ProductUpdate, storage = Depends(get_db)):
     logger.info(f"New product Added")
     new_product =  ProductOut(
         name = product_info.name,

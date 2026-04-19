@@ -14,3 +14,9 @@ engine = create_engine(URL_DATABASE)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+
+def main():
+    print("created postgres session")
+
+if __name__ == "__main__":
+    main()

@@ -6,7 +6,7 @@ from pydantic.functional_validators import AfterValidator
 from uuid import uuid4, UUID
 from sqlalchemy.orm import Session
 from datetime import datetime
-from app.db import SessionLocal, engine
+from .db import get_db
 
 # Simulating Database
 Users_db = []
@@ -31,16 +31,7 @@ def clean_string( v : str ) -> str:
 
 CleanName = Annotated[str, AfterValidator(clean_string)]
 
-#-------------------------------
-# DEPENDANCY INJECTION
-#-------------------------------
-def get_db():
-    db = SessionLocal()
 
-    try:
-        yield db 
-    finally:
-        db.close()
 
 #-------------------------------
 # USER MODELS

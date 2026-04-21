@@ -1,14 +1,28 @@
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
 from pathlib import Path
-import os
 
 
 env_path = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv( env_path )
 
 class Settings(BaseSettings):
-    DB_URL: str = f"postgresql://{os.getenv("DB_USER")}:{os.getenv("DB_PW")}@{os.getenv("DB_HOST")}:{os.getenv("DB_PORT")}/{os.getenv("DB_NAME")}"
+
+    DB_USER: str
+    DB_PW: str
+    DB_HOST: str
+    DB_PORT: int
+    DB_NAME: str
+
+    def DB_URL(self) -> str:
+        return (
+            f"postgresql://{self.DB_USER}:"
+            f"{self.DB_PW}@"
+            f"{self.DB_HOST}:"
+            f"{self.DB_PORT}/"
+            f"{self.DB_NAME}"
+        )
+
     API_V1_STR: str = "/api/v1"
     PROJECT_NAME: str = "DataIngestion"
 

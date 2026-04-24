@@ -7,6 +7,7 @@ from uuid import uuid4, UUID
 from sqlalchemy.orm import Session
 from datetime import datetime
 from .db import get_db
+import .
 
 # Simulating Database
 Users_db = []
@@ -23,55 +24,7 @@ def root():
         "message": "e-commerse  API is running" 
     }
 
- # clean name normalization 
-def clean_string( v : str ) -> str:
-    return v.strip().title()
-
-
-
-CleanName = Annotated[str, AfterValidator(clean_string)]
-
-
-
-#-------------------------------
-# USER MODELS
-#-------------------------------
-class UserBase(BaseModel): # This is internal
-    first_name : CleanName
-    second_name : CleanName
-
-
-class UserCreate(UserBase):
-    model_config = ConfigDict(extra='forbid') # This forbids any other data from being loaded 
-    password : str
-    email : EmailStr
-    @field_validator("email")
-    @classmethod
-    def email_normalization(cls, v) -> str:
-        return v.strip().lower()
-    
-    
-class UserOut(UserBase):
-    id: UUID = Field(default_factory=uuid4)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    email : EmailStr
-    
-#-------------------------------
-# PRODUCT MODELS
-#-------------------------------
-
-class ProductBase(BaseModel):
-    name : CleanName 
-    price : int = Field( gt = 0 )
-    description : str | None = None
-
-class ProductUpdate(ProductBase):
-    pass
-
-
-class ProductOut(ProductBase):
-    id : UUID = Field(default_factory=uuid4)
-    created_at : datetime = Field(default_factory=datetime.utcnow)
+ 
 
 #------------------------
 # PRODUCT ENDPOINTS

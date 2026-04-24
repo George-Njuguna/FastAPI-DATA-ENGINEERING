@@ -17,7 +17,7 @@ def create_user(db: Session, user: schemas.UserCreate):
 
 def create_product( db : Session, product : schemas.ProductBase):
 
-    db_product = models.User(
+    db_product = models.Product(
         product_name = product.product_name,
         price = product.price,
         product_details = product.product_details
@@ -27,3 +27,4 @@ def create_product( db : Session, product : schemas.ProductBase):
     db.commit()
 
     db.refresh(db_product)
+    return db_product

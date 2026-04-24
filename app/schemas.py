@@ -26,10 +26,10 @@ class UserCreate(UserBase):
     model_config = ConfigDict(extra='forbid') # This forbids any other data from being loaded 
     password : str
     user_email : EmailStr
-    @field_validator("email")
-    @classmethod
-    def email_normalization(cls, v) -> str:
-        return v.strip().lower()
+    #@field_validator("email")
+    #@classmethod
+    #def email_normalization(cls, v) -> str:
+        #return v.strip().lower()
     
     
 class UserOut(UserBase):

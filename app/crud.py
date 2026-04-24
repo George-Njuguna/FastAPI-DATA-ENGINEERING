@@ -4,8 +4,8 @@ from sqlalchemy.orm import Session
 def create_user(db: Session, user: schemas.UserCreate):
     # 1. Map Schema -> Model
     db_user = models.User(
-        name = user.name,
-        email = user.email,
+        user_name = user.user_name,
+        user_email = user.user_email,
         password = user.password
     )
     # 2. Stage and Commit
@@ -14,3 +14,16 @@ def create_user(db: Session, user: schemas.UserCreate):
 
     db.refresh(db_user)
     return db_user
+
+def create_product( db : Session, product : schemas.ProductBase):
+
+    db_product = models.User(
+        product_name = product.product_name,
+        price = product.price,
+        product_details = product.product_details
+    )
+
+    db.add(db_product)
+    db.commit()
+
+    db.refresh(db_product)

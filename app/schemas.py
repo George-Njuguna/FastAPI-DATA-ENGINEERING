@@ -18,7 +18,7 @@ CleanName = Annotated[str, AfterValidator(clean_string)]
 # USER MODELS
 #-------------------------------
 class UserBase(BaseModel): # This is internal
-    name : CleanName = Field(gt =  0 , lt = 2)
+    name : CleanName 
     
 
 
@@ -42,7 +42,7 @@ class UserOut(UserBase):
 #-------------------------------
 
 class ProductBase(BaseModel):
-    name : CleanName = Field( lt = 2 )
+    name : CleanName 
     price : int = Field( gt = 0 )
     description : str | None = None
 

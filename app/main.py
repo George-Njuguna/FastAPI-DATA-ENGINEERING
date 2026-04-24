@@ -7,7 +7,7 @@ from uuid import uuid4, UUID
 from sqlalchemy.orm import Session
 from datetime import datetime
 from .db import get_db
-import .
+import app.schemas as schemas
 
 # Simulating Database
 Users_db = []
@@ -30,10 +30,10 @@ def root():
 # PRODUCT ENDPOINTS
 #------------------------
 
-@app.post("/products/", response_model = ProductOut)
-def PostProduct(product_info : ProductUpdate, storage = Depends(get_db)):
+@app.post("/products/", response_model = schemas.ProductOut)
+def PostProduct(product_info : schemas.ProductUpdate, storage = Depends(get_db)):
     logger.info(f"New product Added")
-    new_product =  ProductOut(
+    new_product =  schemas.ProductOut(
         name = product_info.name,
         price = product_info.price,
         description = product_info.description
@@ -41,7 +41,7 @@ def PostProduct(product_info : ProductUpdate, storage = Depends(get_db)):
     Products_db.append(new_product)
     return new_product
 
-@app.get("/products/", response_model = ProductOut)
+@app.get("/products/", response_model = schemas.ProductOut)
 def get_product():
     return Products_db
 
@@ -49,15 +49,15 @@ def get_product():
 # USER ENDPOINTS
 #---------------------------
 
-@app.post("/create-user/", response_model = UserOut)
-def CreateNewUserAccount(user_info : UserCreate):
+@app.post("/create-user/", response_model = schemas.UserOut)
+def CreateNewUserAccount(user_info : schemas.UserCreate):
     logger.info(f"New Account Created")
-    return UserOut(
+    return schemas.UserOut(
         first_name=user_info.first_name,
         second_name=user_info.second_name,
         email=user_info.email
     )
 
-@app.get("/user/", response_model = UserOut)
+@app.get("/user/", response_model = schemas.UserOut)
 def GetUserInfo():
     return Users_db

@@ -6,8 +6,7 @@ from pydantic.functional_validators import AfterValidator
 from uuid import uuid4, UUID
 from sqlalchemy.orm import Session
 from datetime import datetime
-from .db import get_db
-import app.schemas as schemas
+from . import schemas, db 
 
 # Simulating Database
 Users_db = []
@@ -31,7 +30,7 @@ def root():
 #------------------------
 
 @app.post("/products/", response_model = schemas.ProductOut)
-def PostProduct(product_info : schemas.ProductUpdate, storage = Depends(get_db)):
+def PostProduct(product_info : schemas.ProductUpdate, storage = Depends(db.get_db)):
     logger.info(f"New product Added")
     new_product =  schemas.ProductOut(
         name = product_info.name,

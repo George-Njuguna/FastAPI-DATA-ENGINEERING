@@ -33,7 +33,7 @@ class UserCreate(UserBase):
     
     
 class UserOut(UserBase):
-    id: UUID
+    user_id: int
     created_at: datetime
     email : EmailStr
     
@@ -51,5 +51,5 @@ class ProductUpdate(ProductBase):
 
 
 class ProductOut(ProductBase):
-    id : UUID 
+    product_id : int
     created_at : datetime

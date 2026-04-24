@@ -35,7 +35,7 @@ class UserCreate(UserBase):
 class UserOut(UserBase):
     user_id: int
     created_at: datetime
-    email : EmailStr
+    user_email : EmailStr
 
     class Config:
         from_attributes = True

@@ -1,5 +1,6 @@
 from . import models , schemas
 from sqlalchemy.orm import Session
+from sqlalchemy import select
 
 def create_user(db: Session, user: schemas.UserCreate):
     # 1. Map Schema -> Model
@@ -14,6 +15,16 @@ def create_user(db: Session, user: schemas.UserCreate):
 
     db.refresh(db_user)
     return db_user
+
+def getUserbyId(db : Session, user_id : int):
+
+    stmt = select( models.User).where(models.User.user_id == user_id )
+
+    result = db.execute(stmt)
+
+
+    return result.scalar_one_or_none()
+
 
 def create_product( db : Session, product : schemas.ProductBase):
 

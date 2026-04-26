@@ -18,12 +18,19 @@ def create_user(db: Session, user: schemas.UserCreate):
 
 def getUserbyId(db : Session, user_id : int):
 
-    stmt = select( models.User).where(models.User.user_id == user_id )
+    stmt = select( models.User ).where(models.User.user_id == user_id )
 
     result = db.execute(stmt)
 
 
     return result.scalar_one_or_none()
+
+def getProductbyId(db : Session, product_id : int):
+    stmt = select( models.Product ).where(models.Product.product_id == product_id)
+
+    result = db.execute(stmt)
+
+    return result 
 
 
 def create_product( db : Session, product : schemas.ProductBase):

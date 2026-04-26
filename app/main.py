@@ -34,9 +34,11 @@ def PostProduct(product_info : schemas.ProductUpdate, storage = Depends(db.get_d
     logger.info(f"New product Added")
     return crud.create_product( db = storage, product = product_info)
 
-@app.get("/products/", response_model = schemas.ProductOut)
-def get_product():
-    return Products_db
+@app.get("/products/{product_id}", response_model = schemas.ProductOut)
+def GetProductInfo( product_id : int, storage = Depends(db.get_db)):
+    logger.info(f"Getting info of product {product_id}")
+    return( crud.getProductbyId( db = storage , product_id = product_id ) )
+    
 
 #---------------------------
 # USER ENDPOINTS
@@ -50,5 +52,6 @@ def CreateNewUserAccount(user_info : schemas.UserCreate, storage = Depends(db.ge
 
 
 @app.get("/user/", response_model = schemas.UserOut)
-def GetUserInfo():
-    return Users_db
+def GetUserInfo( user_id : int, storage = Depends(db.get_db)):
+    logger.info(f"Getting info of User {user_id}")
+    return( crud.getUserbyId( db = storage , product_id = user_id ) )

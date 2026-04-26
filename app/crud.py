@@ -30,7 +30,7 @@ def getProductbyId(db : Session, product_id : int):
 
     result = db.execute(stmt)
 
-    return result 
+    return result.scalar_one_or_none() 
 
 
 def create_product( db : Session, product : schemas.ProductBase):

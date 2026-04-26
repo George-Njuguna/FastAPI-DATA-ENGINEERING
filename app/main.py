@@ -51,7 +51,7 @@ def CreateNewUserAccount(user_info : schemas.UserCreate, storage = Depends(db.ge
     return crud.create_user( db = storage, user = user_info)
 
 
-@app.get("/user/", response_model = schemas.UserOut)
+@app.get("/user/{user_id}", response_model = schemas.UserOut)
 def GetUserInfo( user_id : int, storage = Depends(db.get_db)):
     logger.info(f"Getting info of User {user_id}")
-    return( crud.getUserbyId( db = storage , product_id = user_id ) )
+    return( crud.getUserbyId( db = storage , user_id = user_id ) )

@@ -17,6 +17,12 @@ def get_db():
 
     try:
         yield db 
+        db.commit()  
+
+    except:
+        db.rollback() 
+        raise
+    
     finally:
         db.close()
 

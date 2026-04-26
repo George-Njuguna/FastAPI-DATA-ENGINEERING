@@ -11,9 +11,8 @@ def create_user(db: Session, user: schemas.UserCreate):
     )
     # 2. Stage and Commit
     db.add(db_user)
-    db.commit()
+    db.flush()
 
-    db.refresh(db_user)
     return db_user
 
 def getUserbyId(db : Session, user_id : int):
@@ -42,7 +41,5 @@ def create_product( db : Session, product : schemas.ProductBase):
     )
 
     db.add(db_product)
-    db.commit()
-
-    db.refresh(db_product)
+    db.flush()
     return db_product

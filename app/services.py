@@ -12,6 +12,7 @@ def get_total_users( db : Session ):
     return result
 
 
+
 def get_total_products( db : Session ):
 
     stmt = select(func.count(models.Product.product_id))

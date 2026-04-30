@@ -8,9 +8,6 @@ from sqlalchemy.orm import Session
 from datetime import datetime
 from . import schemas, db, crud, services
 
-# Simulating Database
-Users_db = []
-Products_db = []
 
 app = FastAPI()
 logging.basicConfig(level=logging.INFO)
@@ -42,7 +39,7 @@ def GetProductInfo( product_id : int, storage = Depends(db.get_db)):
 @app.get("/total-products/")
 def GetNumberofProducts( storage = Depends(db.get_db)):
     logger.info(f"Getting Total products")
-    return( services.get_total_products( db = storage ) )
+    return( crud.get_total_products( db = storage ) )
     
 
 #---------------------------
@@ -64,6 +61,6 @@ def GetUserInfo( user_id : int, storage = Depends(db.get_db)):
 @app.get("/total-user/")
 def GetNumberofUsers( storage = Depends(db.get_db)):
     logger.info(f"Getting Total Users")
-    return( services.get_total_users( db = storage ) )
+    return( crud.get_total_users( db = storage ) )
 
 

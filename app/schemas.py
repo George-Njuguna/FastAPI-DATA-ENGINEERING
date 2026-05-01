@@ -18,24 +18,20 @@ CleanName = Annotated[str, AfterValidator(clean_string)]
 # USER MODELS
 #-------------------------------
 class UserBase(BaseModel): # This is internal
-    user_name : CleanName 
+    name : CleanName 
     
 
 
 class UserCreate(UserBase):
     model_config = ConfigDict(extra='forbid') # This forbids any other data from being loaded 
     password : str
-    user_email : EmailStr
-    #@field_validator("email")
-    #@classmethod
-    #def email_normalization(cls, v) -> str:
-        #return v.strip().lower()
-    
+    email : EmailStr
+   
     
 class UserOut(UserBase):
-    user_id: int
+    id: int
     created_at: datetime
-    user_email : EmailStr
+    email : EmailStr
 
     class Config:
         from_attributes = True
@@ -45,7 +41,7 @@ class UserOut(UserBase):
 #-------------------------------
 
 class ProductBase(BaseModel):
-    product_name : CleanName 
+    name : CleanName 
     price : int = Field( gt = 0 )
     product_details : str | None = None
 
@@ -54,7 +50,7 @@ class ProductUpdate(ProductBase):
 
 
 class ProductOut(ProductBase):
-    product_id : int
+    id : int
     created_at : datetime
 
     class Config:

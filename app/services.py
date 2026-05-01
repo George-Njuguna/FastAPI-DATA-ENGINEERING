@@ -82,7 +82,7 @@ def get_product_by_id( db: Session, id: int ):
     if not product:
         raise HTTPException(
             status_code=404, 
-            detail=f"Productr with ID {id} Not Found."
+            detail=f"Product with ID {id} Not Found."
         )
 
     return product

@@ -34,7 +34,7 @@ def PostProduct(product_info : schemas.ProductCreate, storage = Depends(db.get_d
 @app.get("/products/{id}", response_model = schemas.ProductOut)
 def GetProductInfo( id : int, storage = Depends(db.get_db)):
     logger.info(f"Getting info of product {id}")
-    return( crud.getProductbyId( db = storage , id = id ) )
+    return( services.get_product_by_id( db = storage , id = id ) )
 
 @app.get("/total-products/", response_model = schemas.ProductStats)
 def GetNumberofProducts( storage = Depends(db.get_db)):
@@ -56,7 +56,7 @@ def CreateNewUserAccount(user_info : schemas.UserCreate, storage = Depends(db.ge
 @app.get("/user/{id}", response_model = schemas.UserOut)
 def GetUserInfo( id : int, storage = Depends(db.get_db)):
     logger.info(f"Getting info of User {id}")
-    return( crud.getUserbyId( db = storage , id = id ) )
+    return( services.get_user_by_id( db = storage , id = id ) )
 
 @app.get("/total-user/", response_model = schemas.UserStats)
 def GetNumberofUsers( storage = Depends(db.get_db)):

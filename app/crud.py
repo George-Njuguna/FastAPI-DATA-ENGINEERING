@@ -5,8 +5,8 @@ from sqlalchemy import select,func
 def add_user(db: Session, user: schemas.UserCreate):
     # 1. Map Schema -> Model
     db_user = models.User(
-        user_name = user.name,
-        user_email = user.email,
+        name = user.name,
+        email = user.email,
         password = user.password
     )
     # 2. Stage and Commit
@@ -32,7 +32,7 @@ def getProductbyId(db : Session, id : int):
 def add_product( db : Session, product : schemas.ProductBase):
 
     db_product = models.Product(
-        product_name = product.name,
+        name = product.name,
         price = product.price,
         product_details = product.product_details
     )

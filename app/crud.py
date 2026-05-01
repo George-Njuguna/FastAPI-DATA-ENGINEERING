@@ -47,7 +47,7 @@ def get_total_users( db : Session, category : str | None = None ):
     stmt = select(func.count(models.User.id))
     result = db.scalar(stmt)
 
-    return result
+    return result or 0
 
 
 
@@ -56,4 +56,4 @@ def get_total_products( db : Session, category : str | None = None ):
     stmt = select(func.count(models.Product.id))
     result = db.scalar(stmt)
 
-    return result
+    return result or 0

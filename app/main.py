@@ -27,7 +27,7 @@ def root():
 #------------------------
 
 @app.post("/products/", response_model = schemas.ProductOut)
-def PostProduct(product_info : schemas.ProductUpdate, storage = Depends(db.get_db)):
+def PostProduct(product_info : schemas.ProductCreate, storage = Depends(db.get_db)):
     logger.info(f"New product Added")
     return services.create_product( db = storage, product = product_info)
 

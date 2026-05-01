@@ -1,6 +1,7 @@
 from . import crud, schemas
 from sqlalchemy.orm import Session
 from datetime import datetime
+from fastapi import HTTPException
 
 def create_user(db: Session, data: schemas.UserCreate):
     try:
@@ -38,74 +39,50 @@ def create_product(db: Session, data: schemas.ProductCreate):
 
 def get_total_users(db: Session , category : str | None = None ) -> int :
 
-    try:
+    count = crud.get_total_users(db)
 
-        count = crud.get_total_users(db)
-        db.flush() 
-        db.commit()
-        db.refresh(count)
+    return schemas.UserStats(
+        total_count = count,
+        category = category or "all",
+        generated_at = datetime.now()
+    )
 
-        return schemas.UserStats(
-            total_count = count,
-            category = category,
-            generated_at = datetime.now()
-        )
-    
-    except Exception as e:
 
-        db.rollback()
-        raise e
     
 
 def get_total_products(db: Session , category : str | None = None ) -> int :
 
-    try:
+    count = crud.get_total_products(db)
 
-        count = crud.get_total_products(db)
-        db.flush() 
-        db.commit()
-        db.refresh(count)
+    return schemas.ProductStats(
+        total_count = count,
+        category = category or "all",
+        generated_at = datetime.now()
+    )
 
-        return schemas.ProductStats(
-            total_count = count,
-            category = category,
-            generated_at = datetime.now()
-        )
-    
-    except Exception as e:
-
-        db.rollback()
-        raise e
 
 
 def get_user_by_id( db: Session, id: int ):
 
-    try: 
+    user = crud.getUserbyId( db, id )
 
-        user = crud.getUserbyId( db, id )
-        db.flush() 
-        db.commit()
-        db.refresh(user)
+    if not user:
+        raise HTTPException(
+            status_code=404, 
+            detail=f"User with ID {id} does not exist in our records."
+        )
+        
+    return user
 
-        return user
-    
-    except Exception as e:
-
-        db.rollback()
-        raise e
 
 def get_product_by_id( db: Session, id: int ):
 
-    try: 
+    product = crud.getProductbyId( db, id )
 
-        product = crud.getProductbyId( db, id )
-        db.flush() 
-        db.commit()
-        db.refresh(product)
+    if not product:
+        raise HTTPException(
+            status_code=404, 
+            detail=f"Productr with ID {id} Not Found."
+        )
 
-        return product
-    
-    except Exception as e:
-
-        db.rollback()
-        raise e
+    return product

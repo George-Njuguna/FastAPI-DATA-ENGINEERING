@@ -45,11 +45,11 @@ class ProductBase(BaseModel):
     price : int = Field( gt = 0 )
     product_details : str | None = None
 
-class ProductUpdate(ProductBase):
+class ProductCreate(ProductBase):
     pass
 
 
-class ProductOut(ProductBase):
+class ProductOut(ProductCreate):
     id : int
     created_at : datetime
 

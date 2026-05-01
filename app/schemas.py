@@ -12,6 +12,19 @@ def clean_string( v : str ) -> str:
 
 CleanName = Annotated[str, AfterValidator(clean_string)]
 
+#------------------------------
+# CALCULATION MODELS 
+#------------------------------
+class ProductStats(BaseModel):
+    total_count : int
+    category : str | None = "all"
+    generated_at : datetime
+
+class UserStats(BaseModel):
+    total_count : int
+    category : str | None = "all"
+    generated_at : datetime
+
 
 
 #-------------------------------

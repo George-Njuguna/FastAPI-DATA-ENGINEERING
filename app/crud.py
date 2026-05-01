@@ -42,8 +42,8 @@ def add_product( db : Session, product : schemas.ProductBase):
     return db_product
 
 
-def get_total_users( db : Session ):
-
+def get_total_users( db : Session, category : str | None = None ):
+    # add an if statement later when adding category 
     stmt = select(func.count(models.User.id))
     result = db.scalar(stmt)
 
@@ -51,8 +51,8 @@ def get_total_users( db : Session ):
 
 
 
-def get_total_products( db : Session ):
-
+def get_total_products( db : Session, category : str | None = None ):
+    # add an if statement later when adding category
     stmt = select(func.count(models.Product.id))
     result = db.scalar(stmt)
 

@@ -36,10 +36,10 @@ def GetProductInfo( product_id : int, storage = Depends(db.get_db)):
     logger.info(f"Getting info of product {product_id}")
     return( crud.getProductbyId( db = storage , product_id = product_id ) )
 
-@app.get("/total-products/")
+@app.get("/total-products/", response_model = schemas.ProductStats)
 def GetNumberofProducts( storage = Depends(db.get_db)):
     logger.info(f"Getting Total products")
-    return( crud.get_total_products( db = storage ) )
+    return( services.get_total_products( db = storage ) )
     
 
 #---------------------------
@@ -58,9 +58,9 @@ def GetUserInfo( user_id : int, storage = Depends(db.get_db)):
     logger.info(f"Getting info of User {user_id}")
     return( crud.getUserbyId( db = storage , user_id = user_id ) )
 
-@app.get("/total-user/")
+@app.get("/total-user/", response_model = schemas.UserStats)
 def GetNumberofUsers( storage = Depends(db.get_db)):
     logger.info(f"Getting Total Users")
-    return( crud.get_total_users( db = storage ) )
+    return( services.get_total_users( db = storage ) )
 
 

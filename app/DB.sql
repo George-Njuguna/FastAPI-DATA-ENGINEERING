@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users(
 CREATE TABLE IF NOT EXISTS products(
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    product_details VARCHAR(200) NOT NULL,
+    details VARCHAR(200) NOT NULL,
     price INT, 
     created_at TIMESTAMPTZ DEFAULT NOW()
 );

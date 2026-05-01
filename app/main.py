@@ -31,10 +31,10 @@ def PostProduct(product_info : schemas.ProductCreate, storage = Depends(db.get_d
     logger.info(f"New product Added")
     return services.create_product( db = storage, product = product_info)
 
-@app.get("/products/{product_id}", response_model = schemas.ProductOut)
-def GetProductInfo( product_id : int, storage = Depends(db.get_db)):
-    logger.info(f"Getting info of product {product_id}")
-    return( crud.getProductbyId( db = storage , product_id = product_id ) )
+@app.get("/products/{id}", response_model = schemas.ProductOut)
+def GetProductInfo( id : int, storage = Depends(db.get_db)):
+    logger.info(f"Getting info of product {id}")
+    return( crud.getProductbyId( db = storage , id = id ) )
 
 @app.get("/total-products/", response_model = schemas.ProductStats)
 def GetNumberofProducts( storage = Depends(db.get_db)):
@@ -53,10 +53,10 @@ def CreateNewUserAccount(user_info : schemas.UserCreate, storage = Depends(db.ge
     return services.create_user( db = storage, user = user_info)
 
 
-@app.get("/user/{user_id}", response_model = schemas.UserOut)
-def GetUserInfo( user_id : int, storage = Depends(db.get_db)):
-    logger.info(f"Getting info of User {user_id}")
-    return( crud.getUserbyId( db = storage , user_id = user_id ) )
+@app.get("/user/{id}", response_model = schemas.UserOut)
+def GetUserInfo( id : int, storage = Depends(db.get_db)):
+    logger.info(f"Getting info of User {id}")
+    return( crud.getUserbyId( db = storage , id = id ) )
 
 @app.get("/total-user/", response_model = schemas.UserStats)
 def GetNumberofUsers( storage = Depends(db.get_db)):

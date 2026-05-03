@@ -29,7 +29,7 @@ def root():
 @app.post("/products/", response_model = schemas.ProductOut)
 def PostProduct(product_info : schemas.ProductCreate, storage = Depends(db.get_db)):
     logger.info(f"New product Added")
-    return services.create_product( db = storage, product = product_info)
+    return services.create_product( db = storage, data = product_info)
 
 @app.get("/products/{id}", response_model = schemas.ProductOut)
 def GetProductInfo( id : int, storage = Depends(db.get_db)):
@@ -50,7 +50,7 @@ def GetNumberofProducts( storage = Depends(db.get_db)):
 def CreateNewUserAccount(user_info : schemas.UserCreate, storage = Depends(db.get_db)):
 
     logger.info(f"New Account Created")
-    return services.create_user( db = storage, user = user_info)
+    return services.create_user( db = storage, data = user_info)
 
 
 @app.get("/user/{id}", response_model = schemas.UserOut)

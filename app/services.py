@@ -4,6 +4,12 @@ from datetime import datetime
 from fastapi import HTTPException
 
 def create_user(db: Session, data: schemas.UserCreate):
+
+    existing_user = crud.getProductbyId( db, data.email )
+
+    if existing_user:
+        print(f"User {data.email} already exists. Returning existing record.")
+    
     try:
 
         new_user = crud.add_user(db, data)
@@ -17,7 +23,7 @@ def create_user(db: Session, data: schemas.UserCreate):
     except Exception as e:
 
         db.rollback()
-        raise e
+        raise HTTPException(status_code=400, detail=" User Registration failed.")
     
 
 def create_product(db: Session, data: schemas.ProductCreate):

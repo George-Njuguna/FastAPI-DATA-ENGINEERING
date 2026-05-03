@@ -14,6 +14,13 @@ def add_user(db: Session, user: schemas.UserCreate):
 
     return db_user
 
+def getUserbyEmail(db: Session, email: str ):
+
+    stmt = select( models.User ).where( models.User.email == email )
+    result = db.execute(stmt)
+
+    return result.scalar_one_or_none()
+
 def getUserbyId(db : Session, id : int):
 
     stmt = select( models.User ).where(models.User.user_id == id )

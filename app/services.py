@@ -12,7 +12,7 @@ def create_user(db: Session, data: schemas.UserCreate):
     
     try:
 
-        new_user = crud.add_user(db, data)
+        new_user = crud.add_user( db, data )
         
         db.flush() 
         db.commit()
@@ -23,13 +23,13 @@ def create_user(db: Session, data: schemas.UserCreate):
     except Exception as e:
 
         db.rollback()
-        raise HTTPException(status_code=400, detail=" User Registration failed.")
+        raise HTTPException( status_code = 400, detail = " User Registration failed." ) 
     
 
-def create_product(db: Session, data: schemas.ProductCreate):
+def create_product( db: Session, data: schemas.ProductCreate ):
     try:
 
-        new_user = crud.add_product(db, data)
+        new_user = crud.add_product( db, data )
         
         db.flush() 
         db.commit()

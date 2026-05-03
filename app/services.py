@@ -8,7 +8,7 @@ def create_user(db: Session, data: schemas.UserCreate):
     existing_user = crud.getUserbyEmail( db, data.email )
 
     if existing_user:
-        print(f"User {data.email} already exists. Returning existing record.")
+        print(f"User {data.email} already exists.")
     
     try:
 

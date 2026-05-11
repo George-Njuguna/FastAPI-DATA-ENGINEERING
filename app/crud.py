@@ -2,6 +2,9 @@ from . import models , schemas
 from sqlalchemy.orm import Session
 from sqlalchemy import select,func 
 
+# ----------------------
+# USER
+#------------------------
 def add_user(db: Session, user: schemas.UserCreate):
     # 1. Map Schema -> Model
     db_user = models.User(
@@ -27,6 +30,10 @@ def getUserbyId(db : Session, id : int):
     result = db.execute(stmt)
 
     return result.scalar_one_or_none()
+
+# -------------------------
+# PRODUCTS
+# -------------------------
 
 def getProductbyId(db : Session, id : int):
 

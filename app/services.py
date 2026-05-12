@@ -60,13 +60,13 @@ def get_user_by_id( db: Session, id: int ):
 def create_product( db: Session, data: schemas.ProductCreate ):
     try:
 
-        new_user = crud.add_product( db, data )
+        new_product = crud.add_product( db, data )
         
         db.flush() 
         db.commit()
-        db.refresh(new_user)
+        db.refresh(new_product)
         
-        return new_user
+        return new_product
 
     except Exception as e:
 

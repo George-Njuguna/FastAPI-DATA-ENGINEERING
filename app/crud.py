@@ -1,6 +1,7 @@
 from . import models , schemas
 from sqlalchemy.orm import Session
 from sqlalchemy import select,func 
+from sqlalchemy.dialects.postgresql import insert
 
 # ----------------------
 # USER
@@ -45,15 +46,28 @@ def getProductbyId(db : Session, id : int):
 
 def add_product( db : Session, product : schemas.ProductBase):
 
-    db_product = models.Product(
+    stmt = insert(models.Product).values(
+        sku = product.sku,
         name = product.name,
         price = product.price,
         product_details = product.product_details
     )
 
-    db.add(db_product)
+    stmt = stmt.on_conflict_do_update(
 
-    return db_product
+        index_elements=["sku"], # checks if product sku exists if it exists it updates 
+
+        set_={
+            "name": product.name,
+            "price": product.price,
+            "product_details": product.product_details
+        }
+
+    ).returning(models.Product)
+
+    result = db.execute(stmt)
+
+    return result.scalar_one()
 
 
 def get_total_users( db : Session, category : str | None = None ):

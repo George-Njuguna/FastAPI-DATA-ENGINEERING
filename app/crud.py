@@ -50,7 +50,7 @@ def add_product( db : Session, product : schemas.ProductBase):
         sku = product.sku,
         name = product.name,
         price = product.price,
-        product_details = product.product_details
+        details = product.details
     )
 
     stmt = stmt.on_conflict_do_update(
@@ -60,7 +60,7 @@ def add_product( db : Session, product : schemas.ProductBase):
         set_={
             "name": product.name,
             "price": product.price,
-            "product_details": product.product_details
+            "details": product.details
         }
 
     ).returning(models.Product)

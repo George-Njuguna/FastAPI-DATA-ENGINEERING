@@ -54,6 +54,7 @@ class UserOut(UserBase):
 #-------------------------------
 
 class ProductBase(BaseModel):
+    sku : str 
     name : CleanName 
     price : int = Field( gt = 0 )
     product_details : str | None = None
@@ -64,6 +65,7 @@ class ProductCreate(ProductBase):
 
 class ProductOut(ProductCreate):
     id : int
+    sku : str
     created_at : datetime
 
     class Config:

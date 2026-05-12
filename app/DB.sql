@@ -9,9 +9,11 @@ CREATE TABLE IF NOT EXISTS users(
 
 CREATE TABLE IF NOT EXISTS products(
     id SERIAL PRIMARY KEY,
+    sku VARCHAR(100) NOT NULL,
     name VARCHAR(100) NOT NULL,
     details VARCHAR(200) NOT NULL,
     price INT, 
-    created_at TIMESTAMPTZ DEFAULT NOW()
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE(sku)
 );
 

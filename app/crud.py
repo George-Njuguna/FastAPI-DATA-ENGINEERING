@@ -53,7 +53,7 @@ def add_product( db : Session, product : schemas.ProductBase):
         details = product.details
     )
 
-    stmt = stmt.on_conflict_do_update(
+    upsert_stmt = stmt.on_conflict_do_update(
 
         index_elements=["sku"], # checks if product sku exists if it exists it updates 
 
@@ -65,9 +65,15 @@ def add_product( db : Session, product : schemas.ProductBase):
 
     ).returning(models.Product)
 
-    result = db.execute(stmt)
+    result = db.execute(upsert_stmt)
 
     return result.scalar_one()
+
+def add_product_bulk( db : Session, products : list[schemas.ProductBase]):
+
+    stmt = insert(models.Products)
+
+    stmt 
 
 
 def get_total_users( db : Session, category : str | None = None ):

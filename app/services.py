@@ -73,6 +73,21 @@ def create_product( db: Session, data: schemas.ProductCreate ):
         db.rollback()
         raise e
     
+def create_bulk_products( db : Session, data : list[schemas.ProductCreate] ):
+    try:
+
+        products = crud.add_product_bulk( db, data)
+
+        db.flush()
+        db.commit()
+        db.refresh(products)
+
+        return products
+    
+    except Exception as e:
+
+        db.rollback()
+        raise e   
 
 def get_total_products(db: Session , category : str | None = None ) -> int :
 

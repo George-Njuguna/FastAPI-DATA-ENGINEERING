@@ -44,7 +44,7 @@ def getProductbyId(db : Session, id : int):
     return result.scalar_one_or_none() 
 
 
-def add_product( db : Session, product : schemas.ProductBase):
+def add_product( db : Session, product : schemas.ProductBase):  # This is only used for one product at a time
 
     stmt = insert(models.Product).values(
         sku = product.sku,
@@ -73,7 +73,20 @@ def add_product_bulk( db : Session, products : list[schemas.ProductBase]):
 
     stmt = insert(models.Products)
 
-    stmt 
+    upsert_stmt = stmt.on_conflict_do_update(
+
+        index_elements = ["sku"],
+        set_ = {
+            "name" : stmt.excluded.name,
+            "price" : stmt.excluded.price,
+            "details" : stmt.excluded.details
+        }
+    )
+
+    return db.execute(
+        upsert_stmt, 
+        [p.model_dump() for p in products]
+        )
 
 
 def get_total_users( db : Session, category : str | None = None ):

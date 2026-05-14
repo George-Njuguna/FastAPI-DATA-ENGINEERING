@@ -25,6 +25,9 @@ class UserStats(BaseModel):
     category : str | None = "all"
     generated_at : datetime
 
+class BulkProductLoad(BaseModel):
+    inserted : int
+    status : str 
 
 
 #-------------------------------

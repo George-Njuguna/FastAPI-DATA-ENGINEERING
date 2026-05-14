@@ -27,7 +27,7 @@ def getUserbyEmail(db: Session, email: str ):
 
 def getUserbyId(db : Session, id : int):
 
-    stmt = select( models.User ).where(models.User.user_id == id )
+    stmt = select( models.User ).where(models.User.user == id )
     result = db.execute(stmt)
 
     return result.scalar_one_or_none()
@@ -71,6 +71,8 @@ def add_product( db : Session, product : schemas.ProductBase):  # This is only u
 
 def add_product_bulk( db : Session, products : list[schemas.ProductBase]):
 
+    deduped_data = {p.sku: p.model_dump() for p in products}
+
     stmt = insert(models.Product)
 
     upsert_stmt = stmt.on_conflict_do_update(
@@ -85,7 +87,7 @@ def add_product_bulk( db : Session, products : list[schemas.ProductBase]):
 
     return db.execute(
         upsert_stmt, 
-        [p.model_dump() for p in products]
+        list(deduped_data.values())
         )
 
 

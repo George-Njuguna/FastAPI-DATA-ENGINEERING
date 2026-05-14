@@ -19,7 +19,6 @@ def create_user(db: Session, data: schemas.UserCreate):
         
         db.flush() 
         db.commit()
-        db.refresh(new_user)
         
         return new_user
 
@@ -64,7 +63,6 @@ def create_product( db: Session, data: schemas.ProductCreate ):
         
         db.flush() 
         db.commit()
-        db.refresh(new_product)
         
         return new_product
 

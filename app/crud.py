@@ -71,7 +71,7 @@ def add_product( db : Session, product : schemas.ProductBase):  # This is only u
 
 def add_product_bulk( db : Session, products : list[schemas.ProductBase]):
 
-    stmt = insert(models.Products)
+    stmt = insert(models.Product)
 
     upsert_stmt = stmt.on_conflict_do_update(
 

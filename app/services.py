@@ -76,13 +76,12 @@ def create_product( db: Session, data: schemas.ProductCreate ):
 def create_bulk_products( db : Session, data : list[schemas.ProductCreate] ):
     try:
 
-        products = crud.add_product_bulk( db, data)
+        crud.add_product_bulk( db, data)
 
-        db.flush()
         db.commit()
 
         return {
-            "inserted": products.rowcount,
+            "inserted": len(data),
             "status": "success"
         }
     

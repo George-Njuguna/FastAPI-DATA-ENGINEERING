@@ -6,7 +6,7 @@ from pydantic.functional_validators import AfterValidator
 from uuid import uuid4, UUID
 from sqlalchemy.orm import Session
 from datetime import datetime
-from . import schemas, db, crud, services
+from . import schemas, db, services
 
 
 app = FastAPI()
@@ -26,7 +26,7 @@ def root():
 # PRODUCT ENDPOINTS
 #------------------------
 
-@app.post("/products/", response_model = schemas.ProductOut)
+@app.post("/product/", response_model = schemas.ProductOut)
 def PostProduct(product_info : schemas.ProductCreate, storage = Depends(db.get_db)):
     logger.info(f"New product Added")
     return services.create_product( db = storage, data = product_info)
@@ -40,6 +40,11 @@ def GetProductInfo( id : int, storage = Depends(db.get_db)):
 def GetNumberofProducts( storage = Depends(db.get_db)):
     logger.info(f"Getting Total products")
     return( services.get_total_products( db = storage ) )
+
+@app.post("/products/", response_model = schemas.BulkProductLoad )
+def BulkProductsLoad( products  : List[schemas.ProductCreate], storage = Depends(db.get_db)):
+    logger.info(f"Loading Bulk Data")
+    return( services.create_bulk_products(db = storage, data = products))
     
 
 #---------------------------

@@ -80,9 +80,11 @@ def create_bulk_products( db : Session, data : list[schemas.ProductCreate] ):
 
         db.flush()
         db.commit()
-        db.refresh(products)
 
-        return products
+        return {
+            "inserted": products.rowcount,
+            "status": "success"
+        }
     
     except Exception as e:
 

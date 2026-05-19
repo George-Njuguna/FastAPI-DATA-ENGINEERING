@@ -19,19 +19,20 @@ class SecurityHandler:
         return pwd_context.verify( str_password , hashed_password )
     
 
-def create_access_token( data : dict, expiry_delta : timedelta | None = None ) -> str:
+    def create_access_token( data : dict, expiry_delta : timedelta | None = None ) -> str:
 
-    if expiry_delta:
-        expire = datetime.now ( timezone.utc ) + expiry_delta
+        if expiry_delta:
+            expire = datetime.now ( timezone.utc ) + expiry_delta
 
-    else:
-        expire = datetime.now(timezone.utc) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        else:
+            expire = datetime.now(timezone.utc) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
 
-    data.update({"exp": int(expire.timestamp())})
+        data.update({"exp": int(expire.timestamp())})
 
-    encoded_jwt = jwt.encode(
-        data, 
-        settings.SECRET_KEY, 
-        algorithm=settings.ALGORITHM
-    )
-    return encoded_jwt
+        encoded_jwt = jwt.encode(
+            data, 
+            settings.SECRET_KEY, 
+            algorithm=settings.ALGORITHM
+        )
+        return encoded_jwt
+

@@ -20,7 +20,13 @@ def root():
         "message": "e-commerse  API is running" 
     }
 
- 
+# ----------------------------
+# AUTHENTIFICATION ENDPOINTS
+# ----------------------------
+
+@app.post("/login/", response_model = schemas.TokenResponse)
+def login( login_info : schemas.LoginRequest , storage = Depends(db.get_db)):
+    return services.AuthService.auth_user_and_create_token(storage, login_info)
 
 #------------------------
 # PRODUCT ENDPOINTS

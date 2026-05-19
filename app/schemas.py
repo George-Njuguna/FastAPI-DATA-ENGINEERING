@@ -12,6 +12,20 @@ def clean_string( v : str ) -> str:
 
 CleanName = Annotated[str, AfterValidator(clean_string)]
 
+#----------------------------
+# LOGIN
+#----------------------------
+class LoginRequest(BaseModel):
+    email : EmailStr
+    password : str
+
+# -----------------------
+# TOKEN
+# -----------------------
+class TokenResponse(BaseModel):
+    acess_token : str
+    token_type : str 
+
 #------------------------------
 # CALCULATION MODELS 
 #------------------------------

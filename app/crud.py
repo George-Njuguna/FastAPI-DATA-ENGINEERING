@@ -18,14 +18,14 @@ def add_user(db: Session, user: schemas.UserCreate):
 
     return db_user
 
-def getUserbyEmail(db: Session, email: str ):
+def get_user_by_email(db: Session, email: str ):
 
     stmt = select( models.User ).where( models.User.email == email )
     result = db.execute(stmt)
 
     return result.scalar_one_or_none()
 
-def getUserbyId(db : Session, id : int):
+def get_user_by_id(db : Session, id : int):
 
     stmt = select( models.User ).where(models.User.user == id )
     result = db.execute(stmt)
@@ -36,7 +36,7 @@ def getUserbyId(db : Session, id : int):
 # PRODUCTS
 # -------------------------
 
-def getProductbyId(db : Session, id : int):
+def get_product_by_id(db : Session, id : int):
 
     stmt = select( models.Product ).where(models.Product.id == id)
     result = db.execute(stmt)

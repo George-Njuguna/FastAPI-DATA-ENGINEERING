@@ -8,7 +8,7 @@ from fastapi import HTTPException
 # -----------------------
 def create_user(db: Session, data: schemas.UserCreate):
 
-    existing_user = crud.getUserbyEmail( db, data.email )
+    existing_user = crud.get_user_by_email( db, data.email )
 
     if existing_user:
         print(f"User {data.email} already exists.")
@@ -42,7 +42,7 @@ def get_total_users(db: Session , category : str | None = None ) -> int :
 
 def get_user_by_id( db: Session, id: int ):
 
-    user = crud.getUserbyId( db, id )
+    user = crud.get_user_by_id( db, id )
 
     if not user:
         raise HTTPException(
@@ -101,7 +101,7 @@ def get_total_products(db: Session , category : str | None = None ) -> int :
 
 def get_product_by_id( db: Session, id: int ):
 
-    product = crud.getProductbyId( db, id )
+    product = crud.get_product_by_id( db, id )
 
     if not product:
         raise HTTPException(

@@ -38,7 +38,7 @@ class AuthService:
 # -----------------------
 # USER
 # -----------------------
-class User:
+class UserService:
 
     @staticmethod
     def create_user(db: Session, data: schemas.UserCreate):
@@ -90,7 +90,7 @@ class User:
 # ---------------------
 # PRODUCTS
 # ---------------------
-class Products:
+class ProductService:
 
     @staticmethod
     def create_product( db: Session, data: schemas.ProductCreate ):

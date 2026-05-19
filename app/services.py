@@ -38,59 +38,61 @@ class AuthService:
 # -----------------------
 # USER
 # -----------------------
-def create_user(db: Session, data: schemas.UserCreate):
+class User:
 
-    existing_user = crud.get_user_by_email( db, data.email )
+    @staticmethod
+    def create_user(db: Session, data: schemas.UserCreate):
 
-    if existing_user:
-        print(f"User {data.email} already exists.")
-    
-    try:
+        existing_user = crud.get_user_by_email( db, data.email )
 
-        new_user = crud.add_user( db, data )
+        if existing_user:
+            print(f"User {data.email} already exists.")
         
-        db.flush() 
-        db.commit()
+        try:
+
+            new_user = crud.add_user( db, data )
+            
+            db.flush() 
+            db.commit()
+            
+            return new_user
+
+        except Exception as e:
+
+            db.rollback()
+            raise HTTPException( status_code = 400, detail = " User Registration failed." ) 
         
-        return new_user
+    @staticmethod   
+    def get_total_users(db: Session , category : str | None = None ) -> int :
 
-    except Exception as e:
+        count = crud.get_total_users(db)
 
-        db.rollback()
-        raise HTTPException( status_code = 400, detail = " User Registration failed." ) 
-    
-
-    
-def get_total_users(db: Session , category : str | None = None ) -> int :
-
-    count = crud.get_total_users(db)
-
-    return schemas.UserStats(
-        total_count = count,
-        category = category or "all",
-        generated_at = datetime.now()
-    )
-
-
-def get_user_by_id( db: Session, id: int ):
-
-    user = crud.get_user_by_id( db, id )
-
-    if not user:
-        raise HTTPException(
-            status_code=404, 
-            detail=f"User with ID {id} does not exist in our records."
+        return schemas.UserStats(
+            total_count = count,
+            category = category or "all",
+            generated_at = datetime.now()
         )
-        
-    return user
+
+    @staticmethod
+    def get_user_by_id( db: Session, id: int ):
+
+        user = crud.get_user_by_id( db, id )
+
+        if not user:
+            raise HTTPException(
+                status_code=404, 
+                detail=f"User with ID {id} does not exist in our records."
+            )
+            
+        return user
     
 
 # ---------------------
 # PRODUCTS
 # ---------------------
-class products:
-    @staticmethod
+class Products:
 
+    @staticmethod
     def create_product( db: Session, data: schemas.ProductCreate ):
         try:
 
@@ -106,6 +108,7 @@ class products:
             db.rollback()
             raise e
     
+    @staticmethod
     def create_bulk_products( db : Session, data : list[schemas.ProductCreate] ):
         try:
 
@@ -122,7 +125,8 @@ class products:
 
             db.rollback()
             raise e   
-
+        
+    @staticmethod
     def get_total_products(db: Session , category : str | None = None ) -> int :
 
         count = crud.get_total_products(db)
@@ -133,7 +137,7 @@ class products:
             generated_at = datetime.now()
         )
 
-
+    @staticmethod
     def get_product_by_id( db: Session, id: int ):
 
         product = crud.get_product_by_id( db, id )

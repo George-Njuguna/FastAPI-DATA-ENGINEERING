@@ -88,57 +88,60 @@ def get_user_by_id( db: Session, id: int ):
 # ---------------------
 # PRODUCTS
 # ---------------------
-def create_product( db: Session, data: schemas.ProductCreate ):
-    try:
+class products:
+    @staticmethod
 
-        new_product = crud.add_product( db, data )
-        
-        db.flush() 
-        db.commit()
-        
-        return new_product
+    def create_product( db: Session, data: schemas.ProductCreate ):
+        try:
 
-    except Exception as e:
+            new_product = crud.add_product( db, data )
+            
+            db.flush() 
+            db.commit()
+            
+            return new_product
 
-        db.rollback()
-        raise e
+        except Exception as e:
+
+            db.rollback()
+            raise e
     
-def create_bulk_products( db : Session, data : list[schemas.ProductCreate] ):
-    try:
+    def create_bulk_products( db : Session, data : list[schemas.ProductCreate] ):
+        try:
 
-        crud.add_product_bulk( db, data)
+            crud.add_product_bulk( db, data)
 
-        db.commit()
+            db.commit()
 
-        return {
-            "inserted": len(data),
-            "status": "success"
-        }
-    
-    except Exception as e:
+            return {
+                "inserted": len(data),
+                "status": "success"
+            }
+        
+        except Exception as e:
 
-        db.rollback()
-        raise e   
+            db.rollback()
+            raise e   
 
-def get_total_products(db: Session , category : str | None = None ) -> int :
+    def get_total_products(db: Session , category : str | None = None ) -> int :
 
-    count = crud.get_total_products(db)
+        count = crud.get_total_products(db)
 
-    return schemas.ProductStats(
-        total_count = count,
-        category = category or "all",
-        generated_at = datetime.now()
-    )
-
-
-def get_product_by_id( db: Session, id: int ):
-
-    product = crud.get_product_by_id( db, id )
-
-    if not product:
-        raise HTTPException(
-            status_code=404, 
-            detail=f"Product with ID {id} Not Found."
+        return schemas.ProductStats(
+            total_count = count,
+            category = category or "all",
+            generated_at = datetime.now()
         )
 
-    return product
+
+    def get_product_by_id( db: Session, id: int ):
+
+        product = crud.get_product_by_id( db, id )
+
+        if not product:
+            raise HTTPException(
+                status_code=404, 
+                detail=f"Product with ID {id} Not Found."
+            )
+
+        return product

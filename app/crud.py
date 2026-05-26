@@ -1,4 +1,4 @@
-from . import models , schemas
+from . import models , schemas, securities
 from sqlalchemy.orm import Session
 from sqlalchemy import select,func 
 from sqlalchemy.dialects.postgresql import insert
@@ -11,7 +11,7 @@ def add_user(db: Session, user: schemas.UserCreate):
     db_user = models.User(
         name = user.name,
         email = user.email,
-        password = user.password
+        password = securities.SecurityHandler.hash_password(user.password)
     )
     # 2. Stage and Commit
     db.add(db_user)

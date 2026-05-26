@@ -1,9 +1,16 @@
-from sqlalchemy import Column, Integer, String, Float,DateTime
+from sqlalchemy import Column, Integer, String, Float, DateTime, Enum
 from sqlalchemy.sql import func
+import enum
 from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
+
+class UserRole(str, enum.Enum):
+    ADMIN = "admin"
+    ENGINEER = "engineer"
+    ANALYST = "analyst"
+    VIEWER = "viewer"
 
 class User(Base):
     __tablename__ = "users" 
@@ -12,8 +19,9 @@ class User(Base):
     name = Column(String)
     email = Column(String, unique=True)
     password = Column(String)
-    role = Column(str)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    role = Column(Enum(UserRole), default=UserRole.VIEWER, nullable=False)
 
 class Product(Base):
     __tablename__ = "products" 

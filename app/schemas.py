@@ -23,7 +23,7 @@ class LoginRequest(BaseModel):
 # TOKEN
 # -----------------------
 class TokenResponse(BaseModel):
-    acess_token : str
+    access_token : str
     token_type : str 
 
 #------------------------------

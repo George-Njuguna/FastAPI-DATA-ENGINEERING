@@ -26,9 +26,10 @@ class AuthService:
                 status_code=status.HTTP_401_UNAUTHORIZED, 
                 detail="Invalid Password"
             )
-        
+
         # creating acess token 
-        access_token = securities.SecurityHandler.create_access_token( data = {"sub": user.email} )
+        access_token = securities.SecurityHandler.create_access_token( data = {"sub": user.email, 
+                                                                               "role": user.role} )
 
         return schemas.TokenResponse(
             access_token=access_token, 
@@ -46,7 +47,10 @@ class UserService:
         existing_user = crud.get_user_by_email( db, data.email )
 
         if existing_user:
-            print(f"User {data.email} already exists.")
+            raise HTTPException(
+                status_code=409,
+                detail="User already exists."
+            )
         
         try:
 

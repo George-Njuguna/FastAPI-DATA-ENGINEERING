@@ -12,6 +12,7 @@ class User(Base):
     name = Column(String)
     email = Column(String, unique=True)
     password = Column(String)
+    role = Column(str)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
 class Product(Base):

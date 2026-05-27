@@ -1,6 +1,10 @@
-from .. import securities, crud, schemas 
-from fastapi import HTTPException , status
+from .. import securities, crud, schemas, config 
+from fastapi import HTTPException , status, Depends
 from sqlalchemy.orm import Session
+from fastapi.security import OAuth2PasswordBearer
+from jose import jwt, JWTError
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 # ----------------------
 # AUTHENTICATION
@@ -33,3 +37,30 @@ class AuthService:
             access_token=access_token, 
             token_type="bearer"
         )
+    
+
+class RoleChecker:
+
+    def __init__(self , allowed_roles : list[str]):
+        self.allowed_roles = allowed_roles
+
+    def __call__(self, token : str = Depends(oauth2_scheme)) -> dict:
+
+        exception = HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Operation rejected: Insufficient pipeline permissions."
+        )
+        
+        try:
+
+            payload = jwt.decode(token, config.settings.SECRET_KEY, algorithms=[config.settings.ALGORITHM])
+            user_role : str  = payload.get("role")
+            
+            if user_role not in self.allowed_roles:
+                raise exception 
+            
+            
+            return payload
+            
+        except JWTError:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Token context")

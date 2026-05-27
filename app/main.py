@@ -1,4 +1,5 @@
 from fastapi import FastAPI ,HTTPException, Depends
+from fastapi.security import OAuth2PasswordRequestForm
 import logging
 from pydantic import BaseModel, Field, EmailStr, field_validator , ConfigDict
 from typing import List, Annotated
@@ -30,9 +31,14 @@ def root():
 # ----------------------------
 
 @app.post("/login/", response_model = schemas.TokenResponse)
-def login( login_info : schemas.LoginRequest , storage = Depends(db.get_db)):
-    return services.AuthService.auth_user_and_create_token(storage, login_info)
+def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(db.get_db)):
 
+    credentials = schemas.LoginRequest(
+        email=form_data.username,
+        password=form_data.password
+    )
+    
+    return services.AuthService.auth_user_and_create_token(db, credentials)
 #------------------------
 # PRODUCT ENDPOINTS
 #------------------------

@@ -21,7 +21,7 @@ app.add_middleware(
 # 4. Connect the Department Routers to the Main Building
 app.include_router(auth.router, prefix="/api/v1")
 app.include_router(products.router, prefix="/api/v1")
-app.include_router(pipelines.router, prefix="/api/v1")
+#app.include_router(pipelines.router, prefix="/api/v1")
 app.include_router(users.router, prefix="/api/v1")
 
 @app.get("/")
@@ -44,43 +44,6 @@ def root():
         "message": "e-commerse  API is running" 
     }
 
-# ----------------------------
-# AUTHENTIFICATION ENDPOINTS
-# ----------------------------
-
-@app.post("/login/", response_model = schemas.TokenResponse)
-def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(db.get_db)):
-
-    credentials = schemas.LoginRequest(
-        email=form_data.username,
-        password=form_data.password
-    )
-    
-    return services.AuthService.auth_user_and_create_token(db, credentials)
-#------------------------
-# PRODUCT ENDPOINTS
-#------------------------
-
-@app.post("/product/", response_model = schemas.ProductOut )
-def PostProduct(product_info : schemas.ProductCreate, storage = Depends(db.get_db), token_context: dict = Depends(allow_engineers)):
-    logger.info(f"New product Added")
-    return services.ProductService.create_product( db = storage, data = product_info)
-
-@app.get("/products/{id}", response_model = schemas.ProductOut)
-def GetProductInfo( id : int, storage = Depends(db.get_db), token_context: dict = Depends(allow_viewers)):
-    logger.info(f"Getting info of product {id}")
-    return( services.ProductService.get_product_by_id( db = storage , id = id ) )
-
-@app.get("/total-products/", response_model = schemas.ProductStats)
-def GetNumberofProducts( storage = Depends(db.get_db), token_context: dict = Depends(allow_viewers)):
-    logger.info(f"Getting Total products")
-    return( services.ProductService.get_total_products( db = storage ) )
-
-@app.post("/products/", response_model = schemas.BulkProductLoad )
-def BulkProductsLoad( products  : List[schemas.ProductCreate], storage = Depends(db.get_db), token_context: dict = Depends(allow_engineers)):
-    logger.info(f"Loading Bulk Data")
-    return( services.ProductService.create_bulk_products(db = storage, data = products))
-    
 
 #---------------------------
 # USER ENDPOINTS

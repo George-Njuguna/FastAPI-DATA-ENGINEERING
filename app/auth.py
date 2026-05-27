@@ -40,11 +40,10 @@ class RoleChecker:
 
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
             user_role : str  = payload.get("role")
-
-            print(user_role)
             
             if user_role not in self.allowed_roles:
                 raise exception 
+            
             
             return payload
             

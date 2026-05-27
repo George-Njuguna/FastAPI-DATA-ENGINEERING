@@ -14,9 +14,9 @@ app = FastAPI()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-allow_engineers = auth.RoleChecker(["ADMIN","ENGINEER"])
-allow_analysts = auth.RoleChecker(["ADMIN","ANALYST"])
-allow_viewers = auth.RoleChecker(["ADMIN","ENGINEER","ANALYST","VIEWER"])
+allow_engineers = auth.RoleChecker(["admin","engineer"])
+allow_analysts = auth.RoleChecker(["admin","analyst"])
+allow_viewers = auth.RoleChecker(["admin","engineer","analyst","viewer"])
 
 
 

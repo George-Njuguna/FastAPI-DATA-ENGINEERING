@@ -1,16 +1,12 @@
 from fastapi import FastAPI ,HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 import logging
-from pydantic import BaseModel, Field, EmailStr, field_validator , ConfigDict
-from typing import List, Annotated
-from pydantic.functional_validators import AfterValidator
-from uuid import uuid4, UUID
+from typing import List
 from sqlalchemy.orm import Session
-from datetime import datetime
 from . import schemas, db, services, auth
 
 
-app = FastAPI()
+app = FastAPI( title = "Data Engineering with Fast API" )
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 

@@ -5,11 +5,11 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 router = APIRouter(
-    prefix="/login",
-    tags=["login Authentification"] # Groups endpoints together neatly in Swagger UI
+    prefix="/auth",
+    tags=["Authentification"] # Groups endpoints together neatly in Swagger UI
 )
 
-@router.post("/login/", response_model = schemas.TokenResponse)
+@router.post("/login", response_model = schemas.TokenResponse)
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(db.get_db)):
 
     credentials = schemas.LoginRequest(

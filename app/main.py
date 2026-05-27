@@ -21,19 +21,12 @@ app.add_middleware(
 # 4. Connect the Department Routers to the Main Building
 app.include_router(auth.router, prefix="/api/v1")
 app.include_router(products.router, prefix="/api/v1")
-#app.include_router(pipelines.router, prefix="/api/v1")
 app.include_router(users.router, prefix="/api/v1")
 
 @app.get("/")
 def health_check():
     return {"status": "healthy", "environment": "production"}
 
-
-@app.get("/")
-def root():
-    return {
-        "message": "e-commerse  API is running" 
-    }
 
 
 

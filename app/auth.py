@@ -41,8 +41,12 @@ class RoleChecker:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
             user_role : str  = payload.get("role")
 
-            if user_role is not self.allowed_roles:
+            print(user_role)
+            
+            if user_role not in self.allowed_roles:
                 raise exception 
+            
+            return payload
             
         except JWTError:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Token context")

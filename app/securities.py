@@ -26,19 +26,21 @@ class SecurityHandler:
     @staticmethod
     def create_access_token( data : dict, expiry_delta : timedelta | None = None ) -> str:
 
+        to_encode = data.copy()
+
         if expiry_delta:
             expire = datetime.now ( timezone.utc ) + expiry_delta
 
         else:
             expire = datetime.now( timezone.utc ) + timedelta( minutes = settings.ACCESS_TOKEN_EXPIRE_MINUTES )
 
-        data.update(
+        to_encode.update(
             {"exp": int( expire.timestamp()),
              "type": "access"}
             )
 
         encoded_jwt = jwt.encode(
-            data, 
+            to_encode, 
             settings.SECRET_KEY, 
             algorithm=settings.ALGORITHM
         )
@@ -47,14 +49,15 @@ class SecurityHandler:
     @staticmethod
     def create_refresh_token( data : dict ) -> str:
 
+        to_encode = data.copy()
         expire = datetime.now( timezone.utc ) + timedelta( days = settings.REFRESH_TOKEN_EXPIRE )
-        data.update(
+        to_encode.update(
             {"exp": int( expire.timestamp() ),
              "type": "refresh"}
             )
         
         encoded_jwt = jwt.encode(
-            data, 
+            to_encode, 
             settings.SECRET_KEY, 
             algorithm=settings.ALGORITHM
         )

@@ -47,7 +47,7 @@ class SecurityHandler:
     @staticmethod
     def create_refresh_token( data : dict ) -> str:
 
-        expire = datetime.now( timezone.utc ) + timedelta( days = settings.ACCESS_TOKEN_EXPIRE_MINUTES )
+        expire = datetime.now( timezone.utc ) + timedelta( days = settings.REFRESH_TOKEN_EXPIRE )
         data.update(
             {"exp": int( expire.timestamp() ),
              "type": "refresh"}

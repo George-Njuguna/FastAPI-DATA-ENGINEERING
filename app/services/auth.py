@@ -18,7 +18,7 @@ class AuthService:
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, 
-                detail="Invalid Email "
+                detail="Invalid Credentials "
             )
         
         # check password 
@@ -26,7 +26,7 @@ class AuthService:
         if not valid_password:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED, 
-                detail="Invalid Password"
+                detail="Invalid Credentials"
             )
 
         # creating acess token 

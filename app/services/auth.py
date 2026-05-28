@@ -42,7 +42,7 @@ class AuthService:
         )
     
     @staticmethod
-    def refresh_token( refresh_token : str ) -> str :
+    def refresh_token( refresh_token : str ) -> schemas.RefreshToken :
 
         exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, 
@@ -62,8 +62,13 @@ class AuthService:
             if email is None:
                 raise exception
                 
-            return securities.SecurityHandler.create_access_token(data={"sub": email,
+            new_access_token = securities.SecurityHandler.create_access_token(data={"sub": email,
                                                                         "role": payload.get("role")})
+            
+            return schemas.RefreshToken(
+                access_token = new_access_token, 
+                token_type = "bearer"
+            )           
             
         except JWTError:
             raise exception

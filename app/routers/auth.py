@@ -19,6 +19,6 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 
     return auth.AuthService.auth_user_and_create_token(db, credentials)
 
-@router.post("/refresh", response_model = schemas.TokenResponse)
+@router.post("/refresh", response_model = schemas.RefreshToken)
 def refresh_token_endpoint( refresh_token: str = Body(..., embed=True)):
     return auth.AuthService.refresh_token(refresh_token)

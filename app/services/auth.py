@@ -1,4 +1,4 @@
-from .. import securities, crud, schemas, config 
+from .. import securities, crud, schemas, config, auth
 from fastapi import HTTPException , status, Depends
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
@@ -32,11 +32,44 @@ class AuthService:
         # creating acess token 
         access_token = securities.SecurityHandler.create_access_token( data = {"sub": user.email, 
                                                                                "role": user.role} )
+        refresh_token = securities.SecurityHandler.create_refresh_token( data = {"sub": user.email, 
+                                                                               "role": user.role} )
 
         return schemas.TokenResponse(
-            access_token=access_token, 
-            token_type="bearer"
+            access_token = access_token, 
+            refresh_token = refresh_token,
+            token_type = "bearer"
         )
+    
+    @staticmethod
+    def refresh_token( refresh_token : str ) -> str :
+
+        exception = HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, 
+            detail="Invalid or expired refresh token"
+        )
+
+        try:
+
+            payload = jwt.decode(refresh_token, config.settings.SECRET_KEY, algorithms=[config.settings.ALGORITHM])
+            
+
+            if payload.get("type") != "refresh":
+                raise exception
+                
+            email = payload.get("sub")
+
+            if email is None:
+                raise exception
+                
+            return securities.SecurityHandler.create_access_token(data={"sub": email,
+                                                                        "role": payload.get("role")})
+            
+        except JWTError:
+            raise exception
+
+
+    
     
 
 class RoleChecker:

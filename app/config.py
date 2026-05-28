@@ -17,7 +17,8 @@ class Settings(BaseSettings):
 
     SECRET_KEY: str = Field(validation_alias="JWT_SECRET_KEY")
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30    
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30  
+    REFRESH_TOKEN_EXPIRE : int = 7  
 
     model_config = SettingsConfigDict(
         env_file = str(ENV_FILE),

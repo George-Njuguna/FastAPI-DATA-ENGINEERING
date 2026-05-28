@@ -1,4 +1,4 @@
-from .. import securities, crud, schemas, config, auth
+from .. import securities, crud, schemas, config
 from fastapi import HTTPException , status, Depends
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer

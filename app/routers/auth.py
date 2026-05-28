@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status,Body
 from .. import schemas, db 
 from ..services import auth
 from fastapi.security import OAuth2PasswordRequestForm
@@ -18,3 +18,7 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     )
 
     return auth.AuthService.auth_user_and_create_token(db, credentials)
+
+@router.post("/refresh", response_model = schemas.TokenResponse)
+def refresh_token_endpoint( refresh_token: str = Body(..., embed=True)):
+    return auth.AuthService.refresh_token(refresh_token)

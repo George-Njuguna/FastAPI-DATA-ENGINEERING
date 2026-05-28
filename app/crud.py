@@ -27,7 +27,7 @@ def get_user_by_email(db: Session, email: str ):
 
 def get_user_by_id(db : Session, id : int):
 
-    stmt = select( models.User ).where(models.User.user == id )
+    stmt = select( models.User ).where(models.User.id == id )
     result = db.execute(stmt)
 
     return result.scalar_one_or_none()

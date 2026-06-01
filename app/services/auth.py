@@ -1,4 +1,4 @@
-from .. import securities, crud, schemas, config
+from .. import securities, crud, schemas, config, db
 from fastapi import HTTPException , status, Depends
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
@@ -82,7 +82,7 @@ class RoleChecker:
     def __init__(self , allowed_roles : list[str]):
         self.allowed_roles = allowed_roles
 
-    def __call__(self, token : str = Depends(oauth2_scheme)) -> dict:
+    def __call__(self, token : str = Depends(oauth2_scheme), db: Session = Depends(db.get_db)) -> dict:
 
         forbided_exception = HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -94,17 +94,21 @@ class RoleChecker:
             detail="Unorthorized"
         )
 
-
         try:
 
             payload = jwt.decode(token, config.settings.SECRET_KEY, algorithms=[config.settings.ALGORITHM])
-            user_role : str  = payload.get("role")
-            
-            if user_role not in self.allowed_roles:
-                raise forbided_exception 
-            
-            
-            return payload
+            email : str = payload.get("email")
+
+            if email is None:
+                raise credential_exception
+                 
             
         except JWTError:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Token context")
+        
+        user = crud.get_user_by_email(db, email)
+
+        if user.role not in self.allowed_roles:
+            raise forbided_exception 
+        
+        return payload

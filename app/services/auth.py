@@ -84,18 +84,24 @@ class RoleChecker:
 
     def __call__(self, token : str = Depends(oauth2_scheme)) -> dict:
 
-        exception = HTTPException(
+        forbided_exception = HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Operation rejected: Insufficient pipeline permissions."
         )
-        
+
+        credential_exception = HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Unorthorized"
+        )
+
+
         try:
 
             payload = jwt.decode(token, config.settings.SECRET_KEY, algorithms=[config.settings.ALGORITHM])
             user_role : str  = payload.get("role")
             
             if user_role not in self.allowed_roles:
-                raise exception 
+                raise forbided_exception 
             
             
             return payload

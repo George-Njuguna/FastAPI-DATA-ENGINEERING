@@ -73,25 +73,11 @@ class AuthService:
         except JWTError:
             raise exception
 
-
-    
-    
-
-class RoleChecker:
-
-    def __init__(self , allowed_roles : list[str]):
-        self.allowed_roles = allowed_roles
-
-    def __call__(self, token : str = Depends(oauth2_scheme), db: Session = Depends(db.get_db)) -> dict:
-
-        forbided_exception = HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Operation rejected: Insufficient pipeline permissions."
-        )
+    def get_current_user( token : str = Depends(oauth2_scheme), db: Session = Depends(db.get_db) ):
 
         credential_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Unorthorized"
+            detail="Unaurthorized"
         )
 
         try:
@@ -101,14 +87,36 @@ class RoleChecker:
 
             if email is None:
                 raise credential_exception
-                 
-            
+                        
+                    
         except JWTError:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid Token context")
         
         user = crud.get_user_by_email(db, email)
 
-        if user.role not in self.allowed_roles:
-            raise forbided_exception 
+        return user
+
+
+
+    
+    
+
+class RoleChecker:
+    def __init__(self, allowed_roles: list[str]):
+        self.allowed_roles = allowed_roles
+
+    def __call__(self, current_user = Depends(AuthService.get_current_user)) -> dict:
+
+        if current_user.role not in self.allowed_roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Unauthorized"
+            )
+            
+        return current_user
+
+
+
+
+
         
-        return payload

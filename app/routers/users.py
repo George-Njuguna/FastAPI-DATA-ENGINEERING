@@ -12,11 +12,6 @@ router = APIRouter(
     tags=["Users Operations "] # Groups endpoints together neatly in Swagger UI
 )
 
-allow_engineers = auth.RoleChecker(["engineer","admin"])
-allow_viewers = auth.RoleChecker(["viewer","engineer","admin"])
-allow_admin = auth.RoleChecker(["admin"])
-allow_analysts = auth.RoleChecker(["admin","analyst"])
-
 @router.post("/create-user/", response_model = schemas.UserOut)
 def CreateNewUserAccount(user_info : schemas.UserCreate, storage = Depends(db.get_db) , current_user = Depends(auth.RoleChecker(["engineer","admin"]))):
 

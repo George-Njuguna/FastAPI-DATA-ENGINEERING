@@ -97,7 +97,7 @@ class RoleChecker:
         try:
 
             payload = jwt.decode(token, config.settings.SECRET_KEY, algorithms=[config.settings.ALGORITHM])
-            email : str = payload.get("email")
+            email : str = payload.get("sub")
 
             if email is None:
                 raise credential_exception

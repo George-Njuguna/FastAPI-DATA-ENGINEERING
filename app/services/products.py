@@ -5,14 +5,24 @@ from fastapi import HTTPException , status
 
 class ProductService:
 
-    def __init__( self, db : Session ):
+    def __init__( 
+            self,
+            db : Session 
+        ):
         
         self.db = db
 
-    def create_product( self, data: schemas.ProductCreate ):
+    def create_product( 
+            self, 
+            data: schemas.ProductCreate 
+        ):
+
         try:
 
-            new_product = crud.add_product( self.db, data )
+            new_product = crud.add_product( 
+                self.db, 
+                data 
+            )
             
             self.db.flush() 
             self.db.commit()
@@ -24,11 +34,18 @@ class ProductService:
             self.db.rollback()
             raise e
     
-    @staticmethod
-    def create_bulk_products( self, data : list[schemas.ProductCreate] ):
+
+    def create_bulk_products( 
+            self,
+            data : list[schemas.ProductCreate] 
+        ):
+
         try:
 
-            crud.add_product_bulk( self.db, data)
+            crud.add_product_bulk( 
+                self.db,
+                data
+            )
 
             self.db.commit()
 
@@ -43,9 +60,14 @@ class ProductService:
             raise e   
         
 
-    def get_total_products( self , category : str | None = None ) -> int :
+    def get_total_products( 
+            self , 
+            category : str | None = None 
+        ) -> int :
 
-        count = crud.get_total_products(self.db)
+        count = crud.get_total_products(
+            self.db
+        )
 
         return schemas.ProductStats(
             total_count = count,
@@ -53,9 +75,15 @@ class ProductService:
             generated_at = datetime.now()
         )
 
-    def get_product_by_id( self, id: int ):
+    def get_product_by_id( 
+            self,
+            id: int
+        ):
 
-        product = crud.get_product_by_id( self.db, id )
+        product = crud.get_product_by_id( 
+            self.db, 
+            id 
+        )
 
         if not product:
             raise HTTPException(

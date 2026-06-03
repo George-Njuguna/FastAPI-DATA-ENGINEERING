@@ -1,4 +1,6 @@
-from ..services import products, auth
+from ..services.auth import RoleChecker
+from ..services.products import ProductService
+from ..dependancies.products import get_product_service
 from .. import schemas, db 
 from fastapi import FastAPI ,HTTPException, Depends, APIRouter
 from typing import List
@@ -12,27 +14,45 @@ router = APIRouter(
     tags=["Products Catalog Operations "] # Groups endpoints together neatly in Swagger UI
 )
 
-allow_engineers = auth.RoleChecker(["engineer"])
-allow_viewers = auth.RoleChecker(["viewer","engineer","admin"])
-allow_admin = auth.RoleChecker(['admin'])
+allow_engineers = ["engineer","admin"]
+allow_viewers = ["viewer","engineer","admin"]
+allow_admin = ['admin']
 
 @router.post("/product/", response_model = schemas.ProductOut )
-def PostProduct(product_info : schemas.ProductCreate, storage = Depends(db.get_db), token_context: dict = Depends(allow_engineers)):
+def PostProduct(
+    product_info : schemas.ProductCreate, 
+    service : ProductService = Depends( get_product_service ), 
+    current_user = Depends(RoleChecker( allow_engineers) )
+):
+
     logger.info(f"New product Added")
-    return products.ProductService.create_product( db = storage, data = product_info)
+    return service.create_product( data = product_info )
 
 @router.get("/products/{id}", response_model = schemas.ProductOut)
-def GetProductInfo( id : int, storage = Depends(db.get_db), token_context: dict = Depends(allow_viewers)):
+def GetProductInfo( 
+    id : int, 
+    service : ProductService = Depends( get_product_service ), 
+    current_user = Depends(RoleChecker( allow_viewers ))
+):
     logger.info(f"Getting info of product {id}")
-    return( products.ProductService.get_product_by_id( db = storage , id = id ) )
+    return( service.get_product_by_id( id = id ) )
 
 @router.get("/total-products/", response_model = schemas.ProductStats)
-def GetNumberofProducts( storage = Depends(db.get_db), token_context: dict = Depends(allow_viewers)):
+def GetNumberofProducts( 
+    service : ProductService = Depends( get_product_service ), 
+    current_user = Depends(RoleChecker( allow_viewers ))
+):
+    
     logger.info(f"Getting Total products")
-    return( products.ProductService.get_total_products( db = storage ) )
+    return( service.get_total_products() )
 
 @router.post("/products/", response_model = schemas.BulkProductLoad )
-def BulkProductsLoad( products  : List[schemas.ProductCreate], storage = Depends(db.get_db), token_context: dict = Depends(allow_engineers)):
+def BulkProductsLoad( 
+    products  : List[schemas.ProductCreate], 
+    service : ProductService = Depends( get_product_service ),  
+    current_user = Depends(RoleChecker( allow_viewers ))
+):
+    
     logger.info(f"Loading Bulk Data")
-    return( products.ProductService.create_bulk_products(db = storage, data = products))
+    return( service.create_bulk_products( data = products ) )
     

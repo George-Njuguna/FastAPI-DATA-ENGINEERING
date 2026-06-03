@@ -5,10 +5,13 @@ from fastapi import HTTPException , status
 
 class UserService:
 
-    @staticmethod
-    def create_user(db: Session, data: schemas.UserCreate):
+    def __init__(self , db : Session):
 
-        existing_user = crud.get_user_by_email( db, data.email )
+        self.db = db 
+        
+    def create_user(self, data: schemas.UserCreate):
+
+        existing_user = crud.get_user_by_email( self.db, data.email )
 
         if existing_user:
             raise HTTPException(
@@ -20,14 +23,14 @@ class UserService:
 
             new_user = crud.add_user( db, data )
             
-            db.flush() 
-            db.commit()
+            self.db.flush() 
+            self.db.commit()
             
             return new_user
 
         except Exception as e:
 
-            db.rollback()
+            self.db.rollback()
             raise HTTPException( status_code = 400, detail = " User Registration failed." ) 
         
     @staticmethod   

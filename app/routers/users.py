@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix="/users",
-    tags=["Users Operations "] # Groups endpoints together neatly in Swagger UI
+    tags=["Users Operations "] 
 )
 
 

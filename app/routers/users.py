@@ -27,4 +27,4 @@ def GetUserInfo( id : int, storage = Depends(db.get_db), current_user = Depends(
 @router.get("/total-user/", response_model = schemas.UserStats)
 def GetNumberofUsers( storage = Depends(db.get_db), current_user = Depends(auth.RoleChecker(["analyst","admin"]) ) ):
     logger.info(f"Getting Total Users")
-    return( users.UserService.get_total_users( db = storage ) )
+    return( users.UserService(storage).get_total_users())

@@ -21,7 +21,7 @@ class UserService:
         
         try:
 
-            new_user = crud.add_user( db, data )
+            new_user = crud.add_user( self.db, data )
             
             self.db.flush() 
             self.db.commit()
@@ -33,10 +33,10 @@ class UserService:
             self.db.rollback()
             raise HTTPException( status_code = 400, detail = " User Registration failed." ) 
         
-    @staticmethod   
-    def get_total_users(db: Session , category : str | None = None ) -> int :
 
-        count = crud.get_total_users(db)
+    def get_total_users(self , category : str | None = None ) -> int :
+
+        count = crud.get_total_users(self.db)
 
         return schemas.UserStats(
             total_count = count,
@@ -44,10 +44,10 @@ class UserService:
             generated_at = datetime.now()
         )
 
-    @staticmethod
-    def get_user_by_id( db: Session, id: int ):
 
-        user = crud.get_user_by_id( db, id )
+    def get_user_by_id( self : Session, id: int ):
+
+        user = crud.get_user_by_id( self.db, id )
 
         if not user:
             raise HTTPException(

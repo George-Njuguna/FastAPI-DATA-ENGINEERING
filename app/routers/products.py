@@ -11,12 +11,13 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix="/products",
-    tags=["Products Catalog Operations "] # Groups endpoints together neatly in Swagger UI
+    tags=["Products Catalog Operations "]
 )
 
 allow_engineers = ["engineer","admin"]
 allow_viewers = ["viewer","engineer","admin"]
 allow_admin = ['admin']
+allow_analysts = ["analyst", "admin" ]
 
 @router.post("/product/", response_model = schemas.ProductOut )
 def PostProduct(

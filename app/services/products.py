@@ -34,7 +34,6 @@ class ProductService:
             self.db.rollback()
             raise e
     
-
     def create_bulk_products( 
             self,
             data : list[schemas.ProductCreate] 
@@ -59,7 +58,6 @@ class ProductService:
             self.db.rollback()
             raise e   
         
-
     def get_total_products( 
             self , 
             category : str | None = None 

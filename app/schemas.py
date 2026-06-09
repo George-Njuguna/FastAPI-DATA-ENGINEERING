@@ -92,3 +92,12 @@ class ProductOut(ProductCreate):
 
     class Config:
         from_attributes = True
+
+#-----------------------------
+# BULK INSERTS
+#-----------------------------
+class BulkResponse(BaseModel):
+    status : str 
+    job_id : str 
+    triggered_by : str 
+    

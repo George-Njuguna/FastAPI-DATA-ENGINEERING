@@ -106,3 +106,8 @@ def get_total_products( db : Session, category : str | None = None ):
     result = db.scalar(stmt)
 
     return result or 0
+
+
+def bulk_file_insert( db : Session):
+    
+    

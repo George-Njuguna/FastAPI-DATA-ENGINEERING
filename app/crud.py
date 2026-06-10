@@ -32,9 +32,9 @@ def get_user_by_id(db : Session, id : int):
 
     return result.scalar_one_or_none()
 
-# -------------------------
+# -----------------------
 # PRODUCTS
-# -------------------------
+# -----------------------
 
 def get_product_by_id(db : Session, id : int):
 

@@ -15,7 +15,13 @@ logger = logging.getLogger(__name__)
 class FileIngestionService:
    
     @staticmethod
-    def bulk_insert_csv_stream(cls, file_bytes: bytes, triggered_by: str , db: Session = None, chunk_size: int = 10000):
+    def bulk_insert_csv_stream(
+        cls, 
+        file_bytes: bytes, 
+        triggered_by: str, 
+        db: Session = None, 
+        chunk_size: int = 10000
+        ):
 
         # Checking if Session db session has been loaded 
         is_independent_task = (db is None)

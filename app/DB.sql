@@ -18,3 +18,9 @@ CREATE TABLE IF NOT EXISTS products(
     UNIQUE(sku)
 );
 
+CREATE TABLE IF NOT EXISTS jobs(
+    job_id uuid PRIMARY KEY,
+    status VARCHAR(100) NOT NULL,
+    triggered_by INT,
+    triggered_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

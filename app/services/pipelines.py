@@ -2,6 +2,7 @@ from ..db import SessionLocal
 from .. import models, schemas
 
 import io
+import time
 import pandas as pd
 from sqlalchemy import insert
 from sqlalchemy.orm import Session
@@ -55,6 +56,7 @@ class FileIngestionService:
             return schemas.BulkResponse(
                 status = "Queued" if is_independent_task else "sucessfully loaded",
                 job_id = str(uuid.uuid4()),
+                inserted = total_inserted,
                 triggered_by = triggered_by,
             )
             
@@ -67,5 +69,32 @@ class FileIngestionService:
             if is_independent_task:
                 logger.info("CLOSING THE CURRENT DATABASE CONNECTION")
                 db.close()
+
+        
+    @staticmethod
+    def demo_bulk_insert(
+        triggered_by: str, 
+        db: Session = None
+    ):
+        is_independent_task = (db is None)
+
+        if is_independent_task:
+            db = SessionLocal()
+
+        total_inserted = 0
+
+        for i in 5000:
+            total_inserted += 1
+
+        time.sleep(300)
+
+        return schemas.BulkResponse(
+            status = "Queued" if is_independent_task else "Succesfully Loaded",
+            job_id = str(uuid.uuid()),
+            inserted = total_inserted,
+            triggered_by = triggered_by
+        )
+
+        
 
    

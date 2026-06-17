@@ -99,6 +99,7 @@ class ProductOut(ProductCreate):
 class BulkResponse(BaseModel):
     status : str 
     job_id : str 
+    inserted : str
     triggered_by : str 
 
     class Config:

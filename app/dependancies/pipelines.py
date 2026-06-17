@@ -6,4 +6,4 @@ from ..services.pipelines import FileIngestionService
 
 # creating an independent file service 
 def get_independent_file_service():
-    return FileIngestionService
+    return FileIngestionService.bulk_insert_csv_stream

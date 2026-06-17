@@ -82,7 +82,7 @@ class ProductService:
             self.db, 
             id 
         )
-
+ 
         if not product:
             raise HTTPException(
                 status_code=404, 

@@ -132,7 +132,7 @@ def update_jobs(
         job_status: str
 ):
     stmt = (
-        db.update(models.JobStatus)
+        update(models.JobStatus)
         .where(models.JobStatus.job_id == job_id)
         .values(status=job_status)
     )

@@ -17,14 +17,14 @@ class FileIngestionService:
 
     @staticmethod
     def create_job_id(
-        db: Session,
         current_user: str
     ):
         
         job_id = str(uuid.uuid4())
 
         try:
-            
+            db = SessionLocal()
+
             crud.insert_jobs(
                 db,
                 job_id = job_id,
@@ -37,8 +37,9 @@ class FileIngestionService:
 
         except Exception as e:
             db.rollback()
+            db.close()
             raise e
-
+        
  
     @staticmethod
     def bulk_insert_csv_stream(
@@ -95,12 +96,7 @@ class FileIngestionService:
             db.commit()
 
             logger.info("INSERTING RECORDS")
-            return schemas.BulkResponse(
-                status = "COMPLETED",
-                job_id = job_id,
-                inserted = total_inserted,
-                triggered_by = triggered_by,
-            )
+ 
             
         except Exception as e:
             db.rollback()
@@ -155,13 +151,7 @@ class FileIngestionService:
         )
          
         db.commit()
-        
-        return schemas.BulkResponse(
-            status = "COMPLETED",
-            job_id = job_id,
-            inserted = total_inserted,
-            triggered_by = triggered_by,
-        )          
+                
 
         
 

@@ -10,6 +10,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 # AUTHENTICATION
 # ----------------------
 class AuthService:
+    
     @staticmethod
 
     def auth_user_and_create_token(storage: Session, data: schemas.LoginRequest) -> schemas.TokenResponse:
@@ -95,11 +96,6 @@ class AuthService:
         user = crud.get_user_by_email(db, email)
 
         return user
-
-
-
-    
-    
 
 class RoleChecker:
     def __init__(self, allowed_roles: list[str]):

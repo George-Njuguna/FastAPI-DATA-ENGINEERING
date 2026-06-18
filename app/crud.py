@@ -2,6 +2,7 @@ from . import models , schemas, securities
 from sqlalchemy.orm import Session
 from sqlalchemy import select,func 
 from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy import update
 
 # ----------------------
 # USER
@@ -107,5 +108,36 @@ def get_total_products( db : Session, category : str | None = None ):
 
     return result or 0
 
+#---------------
+# JOBS
+#---------------
+def insert_jobs(
+        db: Session,
+        job_id: str,
+        job_status: str
+): 
+    
+    db_job = models.JobStatus(
+        job_id = job_id,
+        status = job_status
+    )
+
+    db.add(db_job)
+
+    return db_job
+
+def update_jobs(
+        db: Session,
+        job_id: str,
+        job_status: str
+):
+    stmt = (
+        db.update(models.JobStatus)
+        .where(models.JobStatus.job_id == job_id)
+        .values(status=job_status)
+    )
+    
+    db.execute(stmt)
+    db.flush()
 
     

@@ -100,7 +100,8 @@ class BulkResponse(BaseModel):
     status : str 
     job_id : str 
     inserted : str
-    triggered_by : str 
+    triggered_by : int
 
     class Config:
         from_attributes = True
+

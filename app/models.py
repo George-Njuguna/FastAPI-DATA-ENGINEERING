@@ -44,6 +44,6 @@ class JobStatus(Base):
     __tablename__ = "jobs"
 
     job_id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
-    status = Column(Enum(Status), default = Status.PROCESSING, nullable = False)
+    status = Column(Enum(Status), default = Status.QUEUED, nullable = False)
     triggered_by = Column(Integer)
     triggered_at = Column(DateTime(timezone = True), server_default = func.now())

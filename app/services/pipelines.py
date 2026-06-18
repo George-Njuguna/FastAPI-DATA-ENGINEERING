@@ -5,6 +5,7 @@ import io
 import time
 import pandas as pd
 from sqlalchemy import insert, update
+from fastapi import HTTPException , status 
 from sqlalchemy.orm import Session
 import logging
 import uuid
@@ -152,6 +153,26 @@ class FileIngestionService:
         )
          
         db.commit()
+
+    @staticmethod
+    def get_job_status(
+        id: str
+    ):
+        db = SessionLocal()
+        job = crud.get_job_status( 
+            db, 
+            id 
+        )
+ 
+        if not job:
+            raise HTTPException(
+                status_code=404, 
+                detail=f"job with ID {id} Not Found."
+            )
+        db.close()
+
+        return job
+            
                 
 
         

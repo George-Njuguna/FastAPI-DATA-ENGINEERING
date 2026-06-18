@@ -142,4 +142,13 @@ def update_jobs(
     db.execute(stmt)
     db.flush()
 
+def get_job_status(
+        db: Session,
+        job_id: str
+):
+    stmt = select(models.JobStatus).where(models.JobStatus.job_id == job_id )
+    result = db.execute(stmt)
+
+    return result.scalar_one_or_none() 
+
     

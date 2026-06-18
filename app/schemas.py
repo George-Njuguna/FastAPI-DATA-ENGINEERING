@@ -104,3 +104,9 @@ class BulkResponse(BaseModel):
     class Config:
         from_attributes = True
 
+class PipeOut(BaseModel):
+    status : str
+    job_id : UUID
+    triggered_by : int
+    triggered_at : datetime
+

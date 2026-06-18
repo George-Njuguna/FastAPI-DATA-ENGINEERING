@@ -5,6 +5,7 @@ from .. import schemas, db
 
 from fastapi import APIRouter, UploadFile, File, BackgroundTasks, Depends, status
 import logging
+from uuid import UUID
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -37,6 +38,15 @@ def DemoLoad(
         job_id = job,
         triggered_by = current_user.email
     )
+
+@router.get("/status/{id}", response_model = schemas.PipeOut)
+def GetJobStatus(
+    id: UUID,
+    service: FileIngestionService = Depends(get_pipeline_service),
+    current_user = Depends(RoleChecker(allow_engineers))
+):
+    return service.get_job_status(id = id)
+
 
 
 

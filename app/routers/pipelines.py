@@ -22,11 +22,13 @@ def DemoLoad(
     background_tasks: BackgroundTasks = BackgroundTasks(),
     current_user = Depends(RoleChecker(allow_engineers))
 ):
-    job = service.create_job_id(current_user.email)
+    job = service.create_job_id(
+        current_user = current_user,
+        triggered_by = current_user.id
+    )
 
     background_tasks.add_task(
         FileIngestionService.demo_bulk_insert,
-        triggered_by = current_user.email,
         job_id = job
     )
 

@@ -17,7 +17,8 @@ class FileIngestionService:
 
     @staticmethod
     def create_job_id(
-        current_user: str
+        current_user: str,
+        triggered_by: int
     ):
         
         job_id = str(uuid.uuid4())
@@ -28,6 +29,7 @@ class FileIngestionService:
             crud.insert_jobs(
                 db,
                 job_id = job_id,
+                triggered_by = triggered_by,
                 job_status = "QUEUED"
             )
 
@@ -119,7 +121,6 @@ class FileIngestionService:
         
     @staticmethod
     def demo_bulk_insert(
-        triggered_by: str,
         job_id: str, 
         db: Session = None
     ):
@@ -139,7 +140,7 @@ class FileIngestionService:
 
         total_inserted = 0
 
-        for i in 5000:
+        for i in range(5000):
             total_inserted += 1
 
         time.sleep(300)

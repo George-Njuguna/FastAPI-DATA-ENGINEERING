@@ -114,11 +114,13 @@ def get_total_products( db : Session, category : str | None = None ):
 def insert_jobs(
         db: Session,
         job_id: str,
+        triggered_by: int,
         job_status: str
 ): 
     
     db_job = models.JobStatus(
         job_id = job_id,
+        triggered_by = triggered_by,
         status = job_status
     )
 

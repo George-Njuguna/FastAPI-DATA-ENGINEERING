@@ -48,5 +48,43 @@ def GetJobStatus(
     return service.get_job_status(id = id)
 
 
+@router.post("/upload-csv")#response_model = schemas.PipeOut)
+async def upload_csv_pipeline(
+    file: UploadFile = File(...),  # Instructs FastAPI to expect a file upload parameter
+    service: FileIngestionService = Depends(get_pipeline_service),
+    background_tasks: BackgroundTasks = BackgroundTasks(),
+    current_user = Depends(RoleChecker(allow_engineers))
+):
+    """
+    Secure file endpoint. Accepts a binary .csv file stream, 
+    verifies administrative clearance, and dispatches to the parsing engine.
+    """
+    # 1. Basic format validation check
+    if not file.filename.endswith('.csv'):
+        return {"error": "Rejected: Only CSV format files are allowed here."}
+    
+    job = service.create_job_id(
+        current_user = current_user,
+        triggered_by = current_user.id
+    )
+        
+    # 2. Read the raw stream into byte memory
+    file_contents = await file.read()
+
+    background_tasks.add_task(
+        FileIngestionService.bulk_insert_csv_stream,
+        file_bytes = file_contents,
+        triggered_by = current_user.email,
+        job_id = job
+    )
+
+    
+    return {
+        "status": "Queued",
+        "filename": file.filename,
+        "processed_by": current_user.email
+    }
+
+
 
 

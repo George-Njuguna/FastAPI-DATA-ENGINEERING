@@ -66,7 +66,7 @@ class FileIngestionService:
             crud.update_jobs(
                 db = db,
                 job_id = job_id,
-                job_status = "PROCESSING"
+                job_status = models.Status.PROCESSING
             )
 
             db.commit()
@@ -93,7 +93,7 @@ class FileIngestionService:
             crud.update_jobs(
                 db = db,
                 job_id = job_id,
-                job_status = "COMPLETED"
+                job_status = models.Status.COMPLETED
             )
          
             db.commit()
@@ -107,7 +107,7 @@ class FileIngestionService:
             crud.update_jobs(
                     db = db,
                     job_id = job_id,
-                    job_status = "FAILED"
+                    job_status = models.Status.FAILED
                 )
             db.commit()
 
@@ -134,7 +134,7 @@ class FileIngestionService:
         crud.update_jobs(
             db = db,
             job_id = job_id,
-            job_status = "PROCESSING"
+            job_status = models.Status.PROCESSING
         )       
 
         db.commit() 
@@ -149,7 +149,7 @@ class FileIngestionService:
         crud.update_jobs(
             db = db,
             job_id = job_id,
-            job_status = "COMPLETED"
+            job_status = models.Status.COMPLETED
         )
          
         db.commit()

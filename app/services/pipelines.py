@@ -130,29 +130,47 @@ class FileIngestionService:
 
         if is_independent_task:
             db = SessionLocal()
+        try:
+            crud.update_jobs(
+                db = db,
+                job_id = job_id,
+                job_status = models.Status.PROCESSING
+            )       
 
-        crud.update_jobs(
-            db = db,
-            job_id = job_id,
-            job_status = models.Status.PROCESSING
-        )       
+            db.commit() 
 
-        db.commit() 
+            total_inserted = 0
 
-        total_inserted = 0
+            for i in range(5000):
+                total_inserted += 1
 
-        for i in range(5000):
-            total_inserted += 1
+            time.sleep(300)
 
-        time.sleep(300)
+            crud.update_jobs(
+                db = db,
+                job_id = job_id,
+                job_status = models.Status.COMPLETED
+            )
+            
+            db.commit()
+        
+        except Exception as e:
+            db.rollback()
 
-        crud.update_jobs(
-            db = db,
-            job_id = job_id,
-            job_status = models.Status.COMPLETED
-        )
-         
-        db.commit()
+            crud.update_jobs(
+                    db = db,
+                    job_id = job_id,
+                    job_status = models.Status.FAILED
+                )
+            db.commit()
+
+            raise e
+            
+        finally:
+            if is_independent_task:
+                logger.info("CLOSING THE CURRENT DATABASE CONNECTION")
+                db.close()
+
 
     @staticmethod
     def get_job_status(

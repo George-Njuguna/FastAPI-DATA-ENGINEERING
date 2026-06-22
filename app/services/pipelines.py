@@ -76,6 +76,8 @@ class FileIngestionService:
             # Read the CSV in manageable chunks (Memory-safe)
             # This ensures your server never uses more than a few MBs of RAM
             csv_reader = pd.read_csv(file_wrapper, chunksize=chunk_size)
+
+            # NOTE : ALWAYS VALIDATE THE CSV FILE BEFORE INSERTING WITE A SCRIPT THAT CHECKS THE COLUMNS THAT ARE REQUIRED IF THEY ARE THERE 
             
             total_inserted = 0
             for chunk in csv_reader:

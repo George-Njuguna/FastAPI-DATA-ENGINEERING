@@ -31,7 +31,7 @@ class FileIngestionService:
                 db,
                 job_id = job_id,
                 triggered_by = triggered_by,
-                job_status = "QUEUED"
+                job_status = models.Status.QUEUED
             )
 
             db.commit()

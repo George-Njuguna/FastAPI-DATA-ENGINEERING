@@ -2,7 +2,7 @@ from ..services.auth import RoleChecker
 from ..services.products import ProductService
 from ..dependancies.products import get_product_service
 from .. import schemas, db 
-from fastapi import FastAPI ,HTTPException, Depends, APIRouter
+from fastapi import FastAPI ,HTTPException, Depends, APIRouter, Query
 from typing import List
 import logging
 
@@ -56,4 +56,17 @@ def BulkProductsLoad(
     
     logger.info(f"Loading Bulk Data")
     return( service.create_bulk_products( data = products ) )
+
+@router.get("/products-catalog", response_model = schemas.ProductsPage)
+def GetProductsCatalog(
+    offset: int = Query(default=0, ge=0, description="Number of items to skip"),
+    limit: int = Query(default=100, ge=1, le=1000, description="Items per page (Max: 1000)"),
+    service: ProductService = Depends(get_product_service),
+    current_user = Depends(RoleChecker(allow_viewers))
+):
+    
+    return service.get_all_products(
+        offset = offset,
+        limit = limit
+    )
     

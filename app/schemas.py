@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, EmailStr, field_validator , ConfigDict
-from typing import List, Annotated
+from typing import List, Annotated, Generic, TypeVar
 from pydantic.functional_validators import AfterValidator
 from datetime import datetime
 from uuid import uuid4, UUID
@@ -8,6 +8,7 @@ from uuid import uuid4, UUID
 def clean_string( v : str ) -> str:
     return v.strip().title()
 
+T = TypeVar('T')
 
 
 CleanName = Annotated[str, AfterValidator(clean_string)]
@@ -92,6 +93,12 @@ class ProductOut(ProductCreate):
 
     class Config:
         from_attributes = True
+
+class ProductsPage(BaseModel):
+    items : List[T]
+    total_count : int
+    limit : int
+    offset : int 
 
 #-----------------------------
 # BULK INSERTS

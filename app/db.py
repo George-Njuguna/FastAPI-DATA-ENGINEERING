@@ -10,9 +10,9 @@ import os
 
 engine = create_engine(
     str(settings.DB_URL),
-    pool_size = 20,
-    max_overflow = 10,
-    pool_pre_ping = True
+    pool_size = 20, # Baseline Vault Capacity
+    max_overflow = 10, # The Temporary Emergency Valve
+    pool_pre_ping = True # The Diagnostic Health Check
     )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

@@ -57,7 +57,7 @@ def BulkProductsLoad(
     logger.info(f"Loading Bulk Data")
     return( service.create_bulk_products( data = products ) )
 
-@router.get("/products-catalog", response_model = schemas.ProductsPage)
+@router.get("/products-catalog")#, response_model = schemas.ProductsPage)
 def GetProductsCatalog(
     offset: int = Query(default=0, ge=0, description="Number of items to skip"),
     limit: int = Query(default=100, ge=1, le=1000, description="Items per page (Max: 1000)"),

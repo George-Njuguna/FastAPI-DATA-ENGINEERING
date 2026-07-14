@@ -90,3 +90,26 @@ class ProductService:
             )
 
         return product
+    
+    def get_all_products(
+            self,
+            offset: int,
+            limit: int
+    ):
+        total_count = crud.get_total_products( # gets the total number of Products 
+            db = self.db
+        )
+
+        products = crud.get_all_products(
+            self.db,
+            limit = limit,
+            offset = offset
+        )
+
+        return schemas.ProductsPage(
+            items = products,
+            total_count = total_count,
+            limit = limit,
+            offset = offset
+        )
+        

@@ -33,6 +33,13 @@ def get_user_by_id(db : Session, id : int):
 
     return result.scalar_one_or_none()
 
+def get_total_users( db : Session, category : str | None = None ):
+    # add an if statement later when adding category 
+    stmt = select(func.count(models.User.id))
+    result = db.scalar(stmt)
+
+    return result or 0
+
 # -----------------------
 # PRODUCTS
 # -----------------------
@@ -91,14 +98,21 @@ def add_product_bulk( db : Session, products : list[schemas.ProductBase]):
         list(deduped_data.values())
         )
 
+def get_all_products(
+        db: Session,
+        limit: int,
+        offset:int
+):
+    
+    stmnt = (
+        select(models.Product).
+        order_by(models.Product.id).
+        offset(offset).
+        limit(limit)
+    )
 
-def get_total_users( db : Session, category : str | None = None ):
-    # add an if statement later when adding category 
-    stmt = select(func.count(models.User.id))
-    result = db.scalar(stmt)
-
-    return result or 0
-
+    result =  db.execute(stmnt)
+    return result.scalars().all()
 
 
 def get_total_products( db : Session, category : str | None = None ):

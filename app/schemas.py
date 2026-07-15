@@ -88,17 +88,20 @@ class ProductCreate(ProductBase):
 
 class ProductOut(ProductCreate):
     id : int
-    sku : str
     created_at : datetime
 
     class Config:
         from_attributes = True
 
 class ProductsPage(BaseModel):
-    items : List[T]
+    items : List[ProductOut]
     total_count : int
     limit : int
     offset : int 
+
+    class Config:
+        from_attributes = True
+    
 
 #-----------------------------
 # BULK INSERTS
